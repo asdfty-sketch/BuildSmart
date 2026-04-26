@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Star Score Estimator — BuildSmart</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(160deg, #f0f7f0 0%, #e0f4f1 60%, #fdf6ed 100%);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    color: #2c3322;
+  }
+  .container { max-width: 680px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 2rem; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #00796b; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #1a1f14; margin-bottom: 0.5rem; }
+  .subtitle { font-size: 0.9rem; color: #555f4a; font-weight: 300; line-height: 1.6; }
+
+  .category-card {
+    background: white; border-radius: 12px; margin-bottom: 1rem;
+    border: 1.5px solid #eef0eb; overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .category-card:hover { box-shadow: 0 4px 20px rgba(46,125,50,0.1); }
+
+  .cat-header {
+    padding: 1rem 1.25rem; display: flex; align-items: center;
+    justify-content: space-between; cursor: pointer;
+    background: #fafaf8; border-bottom: 1px solid #eef0eb;
+    user-select: none;
+  }
+  .cat-header-left { display: flex; align-items: center; gap: 0.75rem; }
+  .cat-icon { font-size: 1.3rem; }
+  .cat-name { font-weight: 600; font-size: 0.95rem; color: #1a1f14; }
+  .cat-weight { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #8e9480; }
+  .cat-score { font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 500; color: #2e7d32; background: #f0f7f0; padding: 3px 10px; border-radius: 20px; }
+  .cat-chevron { font-size: 0.8rem; color: #8e9480; transition: transform 0.2s; }
+  .cat-header.open .cat-chevron { transform: rotate(180deg); }
+
+  .cat-body { padding: 1.25rem; display: none; }
+  .cat-body.open { display: block; }
+
+  .criterion { margin-bottom: 1rem; }
+  .crit-label { font-size: 0.83rem; font-weight: 500; color: #555f4a; margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+  .crit-label span { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: #2e7d32; }
+
+  .btn-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .btn-opt {
+    padding: 0.35rem 0.85rem; border-radius: 20px; border: 1.5px solid #d8dcd3;
+    background: #f8f9f7; font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+    color: #555f4a; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-opt:hover { border-color: #2e7d32; color: #2e7d32; background: #f0f7f0; }
+  .btn-opt.selected { border-color: #2e7d32; background: #2e7d32; color: white; }
+
+  /* Result panel */
+  .result-panel {
+    background: white; border-radius: 16px; padding: 2rem;
+    border: 1.5px solid #a8d8a8; margin-top: 1.5rem;
+    box-shadow: 0 8px 32px rgba(46,125,50,0.1);
+  }
+  .result-top { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .star-display {
+    width: 100px; height: 100px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; flex-shrink: 0;
+  }
+  .star-num { font-size: 2.8rem; font-weight: 700; line-height: 1; }
+  .star-label { font-size: 0.7rem; font-weight: 400; margin-top: 2px; }
+  .result-info h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .result-info p { font-size: 0.88rem; color: #555f4a; line-height: 1.6; }
+
+  .breakdown { margin-top: 1rem; }
+  .breakdown-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+  .breakdown-name { font-size: 0.8rem; color: #555f4a; width: 140px; flex-shrink: 0; }
+  .breakdown-track { flex: 1; height: 7px; background: #eef0eb; border-radius: 4px; overflow: hidden; }
+  .breakdown-fill { height: 100%; border-radius: 4px; background: #2e7d32; transition: width 0.6s ease; }
+  .breakdown-pct { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: #2e7d32; width: 36px; text-align: right; }
+
+  .total-score { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-top: 1px solid #eef0eb; margin-top: 1rem; }
+  .total-label { font-size: 0.85rem; font-weight: 500; color: #555f4a; }
+  .total-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #1b5e20; }
+
+  .disclaimer { margin-top: 1rem; font-size: 0.75rem; color: #8e9480; line-height: 1.6; padding: 0.75rem 1rem; background: #f8f9f7; border-radius: 8px; border-left: 3px solid #a8d8a8; }
+  .branding { text-align: right; margin-top: 1rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: #8e9480; }
+  .branding span { color: #2e7d32; }
+
+  .progress-bar-outer { background: #eef0eb; border-radius: 20px; height: 10px; margin: 0.5rem 0 1.5rem; overflow: hidden; }
+  .progress-bar-inner { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #2e7d32, #00796b); transition: width 0.4s ease; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="eyebrow">Interactive Tool · BuildSmart</div>
+    <h1>Green Star Score Estimator</h1>
+    <p class="subtitle">Select the sustainability features of your building across each category to generate an indicative Green Star score. Click each category to expand it.</p>
+  </div>
+
+  <div id="categories"></div>
+
+  <div class="result-panel">
+    <div class="result-top">
+      <div class="star-display" id="star-circle">
+        <div class="star-num" id="star-num">—</div>
+        <div class="star-label" id="star-label">STAR</div>
+      </div>
+      <div class="result-info">
+        <h2 id="rating-title">Complete the checklist</h2>
+        <p id="rating-desc">Select options in each category above to generate your indicative Green Star score.</p>
+      </div>
+    </div>
+    <div class="total-score">
+      <span class="total-label">Total Indicative Score</span>
+      <span class="total-num"><span id="total-score">0</span> / 100</span>
+    </div>
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="total-bar" style="width:0%"></div></div>
+    <div class="breakdown" id="breakdown"></div>
+    <div class="disclaimer">⚠️ This is an educational estimator only. An official Green Star rating requires formal documentation, verification, and assessment by the Green Building Council of Australia (GBCA). Visit <strong>gbca.org.au</strong> for accredited assessment.</div>
+  </div>
+  <div class="branding">Powered by <span>BuildSmart</span> · Educational Use Only</div>
+</div>
+
+<script>
+const categories = [
+  {
+    id: 'energy', name: 'Energy', icon: '⚡', weight: 25, color: '#f59e0b',
+    criteria: [
+      { label: 'On-site renewable energy generation', options: ['None (0)', 'Solar PV <20% (5)', 'Solar PV >20% (10)', 'Full renewable + storage (15)'], scores: [0,5,10,15] },
+      { label: 'Building energy rating (NatHERS / NABERS)', options: ['No rating (0)', '4-Star (2)', '5-Star (4)', '6-Star (7)'], scores: [0,2,4,7] },
+      { label: 'Efficient HVAC system', options: ['Standard (0)', 'High efficiency (2)', 'Passive + smart controls (3)'], scores: [0,2,3] },
+    ]
+  },
+  {
+    id: 'water', name: 'Water', icon: '💧', weight: 12, color: '#3b82f6',
+    criteria: [
+      { label: 'Potable water reduction', options: ['None (0)', 'Low-flow fixtures (2)', 'Rainwater harvesting (4)', 'Greywater recycling + rainwater (6)'], scores: [0,2,4,6] },
+      { label: 'Stormwater management', options: ['None (0)', 'Detention tank (2)', 'Rain garden / bioswale (3)', 'Full WSUD (4)'], scores: [0,2,3,4] },
+      { label: 'Irrigation (if applicable)', options: ['Potable water (0)', 'Drip irrigation (1)', 'Recycled water (2)'], scores: [0,1,2] },
+    ]
+  },
+  {
+    id: 'materials', name: 'Materials', icon: '🧱', weight: 14, color: '#c8922a',
+    criteria: [
+      { label: 'Responsible sourcing (FSC timber, recycled steel)', options: ['None (0)', 'Partial (<50%) (2)', 'Majority (>50%) (4)', 'Full certification (6)'], scores: [0,2,4,6] },
+      { label: 'Embodied carbon strategy', options: ['None (0)', 'Material selection only (2)', 'LCA completed (4)', 'LCA + carbon offset (5)'], scores: [0,2,4,5] },
+      { label: 'Construction waste management', options: ['No plan (0)', 'Waste plan in place (1)', '>80% diversion from landfill (3)'], scores: [0,1,3] },
+    ]
+  },
+  {
+    id: 'ieq', name: 'Indoor Environment Quality', icon: '🌬️', weight: 15, color: '#00796b',
+    criteria: [
+      { label: 'Daylighting', options: ['None targeted (0)', 'Some areas (2)', 'Majority of spaces (4)', 'Modelled + optimised (5)'], scores: [0,2,4,5] },
+      { label: 'Air quality (ventilation, VOC limits)', options: ['Code minimum (0)', 'Enhanced ventilation (2)', 'Low-VOC + CO₂ monitoring (4)', 'Full IAQ management (5)'], scores: [0,2,4,5] },
+      { label: 'Acoustic performance', options: ['Not addressed (0)', 'Basic acoustic design (1)', 'Acoustic modelling done (2)', 'Certified performance (3)'], scores: [0,1,2,3] },
+      { label: 'Thermal comfort', options: ['ASHRAE minimum (0)', 'Enhanced zoning (1)', 'Individual control + monitoring (2)'], scores: [0,1,2] },
+    ]
+  },
+  {
+    id: 'land', name: 'Land Use & Ecology', icon: '🌿', weight: 8, color: '#2e7d32',
+    criteria: [
+      { label: 'Site ecology & biodiversity', options: ['No improvement (0)', 'Landscaping only (1)', 'Native plantings + habitat (3)', 'Certified biodiversity uplift (5)'], scores: [0,1,3,5] },
+      { label: 'Green / blue infrastructure', options: ['None (0)', 'Green roof or wall (2)', 'Green roof + WSUD integration (3)'], scores: [0,2,3] },
+    ]
+  },
+  {
+    id: 'transport', name: 'Transport', icon: '🚲', weight: 9, color: '#7c3aed',
+    criteria: [
+      { label: 'Active transport facilities', options: ['None (0)', 'Bike racks only (1)', 'End-of-trip facilities (3)', 'Full EoT + showers + lockers (4)'], scores: [0,1,3,4] },
+      { label: 'EV charging infrastructure', options: ['None (0)', '<10% spaces (1)', '>25% spaces (2)', 'Future-ready all spaces (3)'], scores: [0,1,2,3] },
+      { label: 'Public transport access', options: ['Poor access (0)', 'Within 800m (1)', 'Within 400m (2)'], scores: [0,1,2] },
+    ]
+  },
+  {
+    id: 'innovation', name: 'Innovation', icon: '💡', weight: 5, color: '#dc2626',
+    criteria: [
+      { label: 'Innovative sustainability feature', options: ['None (0)', 'Minor innovation (1)', 'Significant novel approach (2)', 'World-leading solution (3)'], scores: [0,1,2,3] },
+      { label: 'Green Star accredited professional', options: ['No (0)', 'Yes (2)'], scores: [0,2] },
+    ]
+  },
+  {
+    id: 'management', name: 'Management', icon: '📋', weight: 12, color: '#0891b2',
+    criteria: [
+      { label: 'Green building management plan', options: ['None (0)', 'Basic plan (2)', 'Full commissioning + handover (4)', 'Ongoing monitoring + reporting (5)'], scores: [0,2,4,5] },
+      { label: 'Metering & sub-metering', options: ['Whole building only (0)', 'Key systems metered (2)', 'Full sub-metering + dashboard (3)', 'Occupant-facing real-time data (4)'], scores: [0,2,3,4] },
+      { label: 'Stakeholder engagement', options: ['Not documented (0)', 'Community consultation (1)', 'Ongoing engagement plan (3)'], scores: [0,1,3] },
+    ]
+  },
+];
+
+// State
+const state = {};
+categories.forEach(cat => {
+  state[cat.id] = {};
+  cat.criteria.forEach((cr, i) => { state[cat.id][i] = null; });
+});
+
+function buildUI() {
+  const container = document.getElementById('categories');
+  categories.forEach(cat => {
+    const card = document.createElement('div');
+    card.className = 'category-card';
+    card.innerHTML = `
+      <div class="cat-header" id="hdr-${cat.id}" onclick="toggleCat('${cat.id}')">
+        <div class="cat-header-left">
+          <span class="cat-icon">${cat.icon}</span>
+          <div>
+            <div class="cat-name">${cat.name}</div>
+            <div class="cat-weight">Weight: ${cat.weight} points</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <span class="cat-score" id="score-${cat.id}">0 pts</span>
+          <span class="cat-chevron">▼</span>
+        </div>
+      </div>
+      <div class="cat-body" id="body-${cat.id}">
+        ${cat.criteria.map((cr, ci) => `
+          <div class="criterion">
+            <div class="crit-label">${cr.label} <span id="pts-${cat.id}-${ci}">0 pts</span></div>
+            <div class="btn-group">
+              ${cr.options.map((opt, oi) => `
+                <button class="btn-opt" onclick="selectOpt('${cat.id}',${ci},${oi},${cr.scores[oi]})">${opt}</button>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function toggleCat(id) {
+  const hdr = document.getElementById('hdr-' + id);
+  const body = document.getElementById('body-' + id);
+  hdr.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+function selectOpt(catId, critIdx, optIdx, score) {
+  state[catId][critIdx] = score;
+  // Update button styles
+  const cat = categories.find(c => c.id === catId);
+  const cr = cat.criteria[critIdx];
+  const btns = document.querySelectorAll(`#body-${catId} .criterion:nth-child(${critIdx+1}) .btn-opt`);
+  btns.forEach((b, i) => b.classList.toggle('selected', i === optIdx));
+  document.getElementById(`pts-${catId}-${critIdx}`).textContent = score + ' pts';
+  updateResult();
+}
+
+function catTotal(catId) {
+  return Object.values(state[catId]).reduce((a, v) => a + (v || 0), 0);
+}
+
+function catMax(cat) {
+  return cat.criteria.reduce((a, cr) => a + Math.max(...cr.scores), 0);
+}
+
+function updateResult() {
+  // Per-category scores
+  let grandTotal = 0;
+  const breakdownHTML = categories.map(cat => {
+    const tot = catTotal(cat.id);
+    const max = catMax(cat);
+    const pct = max > 0 ? Math.round((tot / max) * cat.weight) : 0;
+    grandTotal += pct;
+    const barPct = max > 0 ? Math.round((tot / max) * 100) : 0;
+    document.getElementById(`score-${cat.id}`).textContent = pct + ' / ' + cat.weight + ' pts';
+    return `
+      <div class="breakdown-row">
+        <div class="breakdown-name">${cat.icon} ${cat.name}</div>
+        <div class="breakdown-track"><div class="breakdown-fill" style="width:${barPct}%; background:${cat.color};"></div></div>
+        <div class="breakdown-pct">${pct}/${cat.weight}</div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('breakdown').innerHTML = breakdownHTML;
+  document.getElementById('total-score').textContent = grandTotal;
+  document.getElementById('total-bar').style.width = grandTotal + '%';
+
+  // Star rating
+  const circle = document.getElementById('star-circle');
+  const starNum = document.getElementById('star-num');
+  const starLabel = document.getElementById('star-label');
+  const title = document.getElementById('rating-title');
+  const desc = document.getElementById('rating-desc');
+
+  let stars, bg, fg, titleText, descText;
+  if (grandTotal >= 90) {
+    stars = '6★'; bg = 'linear-gradient(135deg,#1b5e20,#2e7d32)'; fg = 'white';
+    titleText = '6 Star — World Leadership';
+    descText = 'Exceptional. This building demonstrates global leadership in sustainability. Eligible for GBCA\'s highest recognition.';
+  } else if (grandTotal >= 75) {
+    stars = '5★'; bg = 'linear-gradient(135deg,#2e7d32,#388e3c)'; fg = 'white';
+    titleText = '5 Star — Australian Excellence';
+    descText = 'Excellent performance. This building demonstrates best practice in sustainable design well above the market standard.';
+  } else if (grandTotal >= 60) {
+    stars = '4★'; bg = 'linear-gradient(135deg,#388e3c,#66bb6a)'; fg = 'white';
+    titleText = '4 Star — Best Practice';
+    descText = 'Strong performance. This building reflects best practice in sustainable design and is eligible for Green Star certification.';
+  } else if (grandTotal >= 45) {
+    stars = '3★'; bg = 'linear-gradient(135deg,#00796b,#26a69a)'; fg = 'white';
+    titleText = '3 Star — Good Practice';
+    descText = 'Good sustainable features are present. Some improvements would be needed to meet the minimum 4-Star certification threshold.';
+  } else if (grandTotal > 0) {
+    stars = '~'; bg = 'linear-gradient(135deg,#c8922a,#e0a040)'; fg = 'white';
+    titleText = 'Below Certification Threshold';
+    descText = 'Significant improvements are needed across multiple categories to achieve Green Star certification (minimum 45 points / 3 Star).';
+  } else {
+    stars = '—'; bg = '#f0f7f0'; fg = '#8e9480';
+    titleText = 'Complete the checklist';
+    descText = 'Select options in each category above to generate your indicative Green Star score.';
+  }
+
+  circle.style.background = bg;
+  starNum.style.color = fg;
+  starNum.textContent = stars;
+  starLabel.style.color = fg;
+  title.textContent = titleText;
+  desc.textContent = descText;
+}
+
+buildUI();
+</script>
+</body>
+</html>
