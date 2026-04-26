@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildSmart Knowledge Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: linear-gradient(160deg, #f0f7f0 0%, #e0f4f1 55%, #fdf6ed 100%); min-height: 100vh; padding: 2rem 1rem; color: #2c3322; }
+  .container { max-width: 620px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 2rem; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: #2e7d32; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .logo-dot { width: 8px; height: 8px; background: #26a69a; border-radius: 50%; display: inline-block; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #00796b; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700; color: #1a1f14; margin-bottom: 0.5rem; }
+  .subtitle { font-size: 0.9rem; color: #555f4a; font-weight: 300; line-height: 1.65; }
+  .start-card { background: white; border-radius: 16px; padding: 2.5rem; border: 1.5px solid #eef0eb; box-shadow: 0 4px 24px rgba(46,125,50,0.08); text-align: center; }
+  .start-card h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #1a1f14; margin-bottom: 0.75rem; }
+  .start-card p { font-size: 0.9rem; color: #555f4a; line-height: 1.7; margin-bottom: 1.5rem; }
+  .topic-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+  .topic-pill { padding: 0.35rem 0.9rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500; }
+  .pill-green { background: #f0f7f0; color: #2e7d32; border: 1px solid #a8d8a8; }
+  .pill-teal { background: #e0f4f1; color: #00796b; border: 1px solid #6dccc0; }
+  .pill-earth { background: #fdf6ed; color: #8d6018; border: 1px solid #e8c68a; }
+  .pill-blue { background: #e8f4fd; color: #1565c0; border: 1px solid #90caf9; }
+  .start-btn { width: 100%; padding: 0.95rem; background: #2e7d32; color: white; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .start-btn:hover { background: #388e3c; }
+  .progress-wrap { margin-bottom: 1.5rem; }
+  .progress-top { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+  .progress-lbl { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #8e9480; }
+  .progress-track { height: 7px; background: #d4ecd4; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2e7d32, #00796b); transition: width 0.4s ease; }
+  .quiz-card { background: white; border-radius: 16px; padding: 2rem; border: 1.5px solid #eef0eb; box-shadow: 0 4px 20px rgba(46,125,50,0.07); }
+  .q-section { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 0.85rem; }
+  .sec-green { background: #f0f7f0; color: #2e7d32; border: 1px solid #a8d8a8; }
+  .sec-teal { background: #e0f4f1; color: #00796b; border: 1px solid #6dccc0; }
+  .sec-earth { background: #fdf6ed; color: #8d6018; border: 1px solid #e8c68a; }
+  .q-text { font-size: 1.05rem; font-weight: 500; color: #1a1f14; line-height: 1.55; margin-bottom: 1.5rem; }
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .opt { padding: 0.85rem 1.1rem; border-radius: 10px; border: 1.5px solid #d8dcd3; background: #f8f9f7; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; color: #2c3322; cursor: pointer; text-align: left; transition: all 0.15s; line-height: 1.4; }
+  .opt:hover:not(:disabled) { border-color: #2e7d32; background: #f0f7f0; color: #1b5e20; }
+  .opt.correct { border-color: #2e7d32; background: #f0f7f0; color: #1b5e20; font-weight: 500; }
+  .opt.wrong { border-color: #dc2626; background: #fef2f2; color: #991b1b; }
+  .opt:disabled { cursor: default; }
+  .feedback { margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: 10px; font-size: 0.88rem; line-height: 1.68; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #f0f7f0; border: 1px solid #a8d8a8; color: #1b5e20; }
+  .feedback.wrong { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+  .feedback .page-ref { margin-top: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; opacity: 0.75; }
+  .next-btn { margin-top: 1.25rem; width: 100%; padding: 0.85rem; background: #2e7d32; color: white; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 500; cursor: pointer; transition: background 0.15s; display: none; }
+  .next-btn.show { display: block; }
+  .next-btn:hover { background: #388e3c; }
+  .results { display: none; }
+  .results.show { display: block; }
+  .score-panel { background: white; border-radius: 16px; padding: 2rem; text-align: center; border: 1.5px solid #a8d8a8; box-shadow: 0 8px 32px rgba(46,125,50,0.1); margin-bottom: 1.25rem; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 1.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .score-big { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: white; line-height: 1; }
+  .score-of { font-size: 0.85rem; color: rgba(255,255,255,0.8); }
+  .res-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #1a1f14; margin-bottom: 0.5rem; }
+  .res-sub { font-size: 0.9rem; color: #555f4a; line-height: 1.65; }
+  .section-breakdown { background: white; border-radius: 12px; padding: 1.25rem 1.5rem; border: 1.5px solid #eef0eb; margin-bottom: 1rem; }
+  .sb-title { font-size: 0.8rem; font-weight: 600; color: #555f4a; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'DM Mono', monospace; }
+  .sb-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+  .sb-name { font-size: 0.82rem; color: #555f4a; width: 165px; flex-shrink: 0; }
+  .sb-track { flex: 1; height: 7px; background: #eef0eb; border-radius: 4px; overflow: hidden; }
+  .sb-fill { height: 100%; border-radius: 4px; transition: width 0.7s ease; }
+  .sb-score { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #2e7d32; width: 32px; text-align: right; }
+  .breakdown-list { background: white; border-radius: 12px; padding: 1.25rem 1.5rem; border: 1.5px solid #eef0eb; margin-bottom: 1rem; }
+  .bl-title { font-size: 0.8rem; font-weight: 600; color: #555f4a; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'DM Mono', monospace; }
+  .bl-item { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.55rem 0; border-bottom: 1px solid #eef0eb; font-size: 0.84rem; line-height: 1.5; }
+  .bl-item:last-child { border-bottom: none; }
+  .restart-btn { width: 100%; padding: 0.9rem; background: #2e7d32; color: white; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .restart-btn:hover { background: #388e3c; }
+  .branding { text-align: right; margin-top: 1rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: #8e9480; }
+  .branding span { color: #2e7d32; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo"><span class="logo-dot"></span>BuildSmart</div>
+    <div class="eyebrow">Knowledge Quiz</div>
+    <h1>How well do you know BuildSmart?</h1>
+    <p class="subtitle">20 questions drawn entirely from the content on this website. All answers can be found across the Home, Smart Construction, Sustainable Buildings, and Emerging Technology pages.</p>
+  </div>
+  <div class="start-card" id="start-screen">
+    <h2>Test Your BuildSmart Knowledge</h2>
+    <p>Every question is based only on information presented on the BuildSmart website. Topics covered:</p>
+    <div class="topic-pills">
+      <span class="topic-pill pill-green">Home Page</span>
+      <span class="topic-pill pill-green">Smart Construction</span>
+      <span class="topic-pill pill-teal">Sustainable Buildings</span>
+      <span class="topic-pill pill-teal">Rating Systems</span>
+      <span class="topic-pill pill-earth">Emerging Technology</span>
+      <span class="topic-pill pill-earth">AI and LiDAR</span>
+      <span class="topic-pill pill-blue">Design Strategies</span>
+      <span class="topic-pill pill-blue">Key Stats</span>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+  </div>
+  <div id="quiz-area" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span class="progress-lbl" id="prog-lbl">Question 1 of 20</span>
+        <span class="progress-lbl" id="score-lbl">Score: 0 / 20</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div class="quiz-card">
+      <div id="q-badge"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQ()">Next Question</button>
+    </div>
+  </div>
+  <div class="results" id="results">
+    <div class="score-panel">
+      <div class="score-circle" id="score-circle">
+        <div class="score-big" id="final-num"></div>
+        <div class="score-of">/ 20</div>
+      </div>
+      <div class="res-title" id="res-title"></div>
+      <div class="res-sub" id="res-sub"></div>
+    </div>
+    <div class="section-breakdown">
+      <div class="sb-title">Performance by Section</div>
+      <div id="sb-rows"></div>
+    </div>
+    <div class="breakdown-list">
+      <div class="bl-title">Question Review</div>
+      <div id="bl-items"></div>
+    </div>
+    <button class="restart-btn" onclick="restart()">Try Again</button>
+  </div>
+  <div class="branding">Powered by <span>BuildSmart</span> - All questions based on BuildSmart website content</div>
+</div>
+<script>
+var questions = [
+  { section: 'Home Page', badge: 'sec-green', q: 'According to the BuildSmart homepage, what percentage of global CO2 emissions come from buildings?', opts: ['25%','33%','39%','45%'], answer: 2, explanation: 'The BuildSmart homepage displays three key statistic cards. The first card states that 39% of global CO2 emissions come from buildings.', ref: 'Home page - Key statistics cards' },
+  { section: 'Home Page', badge: 'sec-green', q: 'The BuildSmart homepage states the global green building market will reach what value by 2030?', opts: ['$800 billion','$1.2 trillion','$1.6 trillion','$2.4 trillion'], answer: 2, explanation: 'The second statistic card on the BuildSmart homepage states the global green building market will reach $1.6 trillion by 2030.', ref: 'Home page - Key statistics cards' },
+  { section: 'Home Page', badge: 'sec-green', q: 'According to BuildSmart, citing Deakin University, what percentage of Australia\'s waste comes from the construction industry?', opts: ['20%','30%','40%','50%'], answer: 2, explanation: 'BuildSmart states, citing Deakin University, that it is estimated 40% of Australia\'s waste comes from the construction industry.', ref: 'Home page - Who is BuildSmart For? section' },
+  { section: 'Home Page', badge: 'sec-green', q: 'BuildSmart cites a McKinsey study stating the circular economy could reduce built environment carbon emissions by up to how much?', opts: ['25%','50%','75%','90%'], answer: 2, explanation: 'The Who is BuildSmart For? section states that a McKinsey study suggested the circular economy approach could reduce the built environment\'s carbon emissions by up to 75%.', ref: 'Home page - Who is BuildSmart For? section' },
+  { section: 'Home Page', badge: 'sec-green', q: 'Which of the following is listed as a target audience on the BuildSmart home page?', opts: ['Real estate agents','Financial analysts','Sustainability Advocates','Urban planners only'], answer: 2, explanation: 'BuildSmart\'s audience list includes: Construction/Property Students, Architects and Designers, Sustainability Advocates, Businesses, and the General Public.', ref: 'Home page - Who is BuildSmart For? section' },
+  { section: 'Smart Construction', badge: 'sec-green', q: 'According to BuildSmart, how does Smart Construction differ from traditional construction?', opts: ['It uses more manual labour','It is characterised by real-time information sharing, predictive decision making and deep integration','It avoids digital tools entirely','It focuses only on prefabrication'], answer: 1, explanation: 'BuildSmart states: Unlike traditional construction which is often fragmented, reactive and dated, Smart Construction is characterised by real-time information sharing, predictive decision making and deep integration between design, procurement, construction and management.', ref: 'Smart Construction page - What is Smart Construction?' },
+  { section: 'Smart Construction', badge: 'sec-green', q: 'BuildSmart says BIM is extremely informative in managing a building as it provides the ability to see systems hidden without physical intervention. Which systems does it specifically mention?', opts: ['Foundation systems, roofing and insulation','Water systems, electricity and HVAC','Exterior cladding, windows and doors','Security systems, lifts and car parks'], answer: 1, explanation: 'BuildSmart states that BIM provides the ability to see and interact with components hidden without physical intervention, specifically listing water systems, electricity and HVAC, and that it can provide real-time data to see flaws within the construction.', ref: 'Smart Construction page - Building Information Modelling section' },
+  { section: 'Smart Construction', badge: 'sec-green', q: 'According to the BuildSmart BIM statistics panel, what percentage improvement in construction schedule predictability is associated with BIM?', opts: ['10%','20%','30%','50%'], answer: 1, explanation: 'The BIM statistics panel on BuildSmart shows four figures: 30% cost reduction, 50% fewer errors, 20% improvement in construction schedule predictability, and 7x ROI for early Australian adopters.', ref: 'Smart Construction page - BIM statistics panel' },
+  { section: 'Smart Construction', badge: 'sec-green', q: 'According to BuildSmart, what does IoT allow inhabitants of a building to have?', opts: ['A paper-based record of energy usage','A vast network of automated and intelligent technologies that exchange information rather than wasteful manual changes','A direct line of communication with the architect','Access to real-time weather data only'], answer: 1, explanation: 'BuildSmart\'s IoT section states: It allows inhabitants of the building to have a vast network of automated and intelligent technologies that exchange information rather than wasteful manual changes.', ref: 'Smart Construction page - Internet of Things and Sensors section' },
+  { section: 'Smart Construction', badge: 'sec-green', q: 'The Smart Construction diagram on BuildSmart shows six surrounding pillars. Which of the following is NOT one of the six shown?', opts: ['BIM and Digital','IoT and Sensors','Robotics and Auto.','Artificial Intelligence'], answer: 3, explanation: 'The six pillars shown are: BIM and Digital, IoT and Sensors, Robotics and Auto., Prefab and Modular, Data and Analytics, and Safety Tech. Artificial Intelligence is not a separate pillar in the diagram.', ref: 'Smart Construction page - Diagram' },
+  { section: 'Sustainable Buildings', badge: 'sec-teal', q: 'The Global CO2 Emissions by Sector chart on BuildSmart shows buildings have a 39% total share. What percentage represents Embodied Carbon specifically?', opts: ['5%','8%','11%','16%'], answer: 2, explanation: 'The chart on the Sustainable Buildings page shows buildings have a 39% total share, broken into 28% Operational Energy and 11% Embodied Carbon.', ref: 'Sustainable Buildings page - Global CO2 chart' },
+  { section: 'Sustainable Buildings', badge: 'sec-teal', q: 'BuildSmart identifies green washing as a concern with rating systems. What does it describe as the knock-on effect?', opts: ['Higher construction costs','Decreasing consumers trust in the rating tools and sustainable outcomes','Fewer buildings achieving certification','Increased government regulation'], answer: 1, explanation: 'BuildSmart states: Green washing is also a big concern as many construction professionals stated they look to achieve the ratings rather than actually being environmentally friendly. This has a knock-on effect of decreasing consumers trust in the rating tools and sustainable outcomes.', ref: 'Sustainable Buildings page - Rating Systems section' },
+  { section: 'Sustainable Buildings', badge: 'sec-teal', q: 'Which three rating systems are covered in the Sustainable Buildings section of BuildSmart?', opts: ['BREEAM, WELL, and NABERS','Green Star, NABERS, and LEED','Green Star, BREEAM, and WELL','LEED, BREEAM, and NatHERS'], answer: 1, explanation: 'BuildSmart\'s Rating Systems section shows three expandable tabs: Green Star, Nabers, and LEED, described as systems used globally to measure a building\'s environmental score.', ref: 'Sustainable Buildings page - Rating Systems section' },
+  { section: 'Sustainable Buildings', badge: 'sec-teal', q: 'BuildSmart describes Park 20/20 in the Netherlands as a circular economy example. Which features does BuildSmart specifically mention?', opts: ['3D printed concrete and robotic assembly','Solar energy, grey water scheme and materials chosen for their ability to be returned to nature','Wind turbines, rainwater harvesting and composting','Aquifer thermal energy and personalised workplace apps'], answer: 1, explanation: 'BuildSmart states that Park 20/20 in the Netherlands features solar energy, a grey water scheme, and all its materials were specifically chosen for their ability to be returned to nature, such as wood and graphenstone paint.', ref: 'Sustainable Buildings page - Circular Economy section' },
+  { section: 'Sustainable Buildings', badge: 'sec-teal', q: 'According to BuildSmart, what star Green Star rating did One Central Park in Sydney achieve, as an example of a Green Wall project?', opts: ['4-Star','5-Star','6-Star','Platinum'], answer: 1, explanation: 'BuildSmart\'s Green Wall section states that One Central Park, opposite UTS in Sydney, features a green facade stretching over 50 metres and achieved a 5 Star Green Star rating, showing that the green wall is not just for show.', ref: 'Sustainable Buildings page - Green Wall section' },
+  { section: 'Sustainable Buildings', badge: 'sec-teal', q: 'BuildSmart states that a carbon neutral building that pays for itself is possible. According to the site, within how many years can a carbon neutral building pay for itself through energy savings?', opts: ['2 years','5 years','10 years','20 years'], answer: 1, explanation: 'BuildSmart states it may be more expensive to achieve carbon neutrality but it is estimated that a carbon neutral building can pay for itself within 5 years through massive energy savings and high desirability.', ref: 'Sustainable Buildings page - Carbon Neutral section' },
+  { section: 'Emerging Technology', badge: 'sec-earth', q: 'According to BuildSmart, how much was invested globally in AI in 2025?', opts: ['$500 billion','$1 trillion','$1.5 trillion','$2.5 trillion'], answer: 2, explanation: 'BuildSmart\'s Artificial Intelligence section states: We have seen an arms race of sorts to build the most powerful AI as well as thousands of startups as $1.5 trillion was invested in 2025.', ref: 'Emerging Technology page - Artificial Intelligence section' },
+  { section: 'Emerging Technology', badge: 'sec-earth', q: 'BuildSmart lists five ways AI is being applied by firms. Which of the following is NOT one of the five listed applications?', opts: ['Analyse big data for investment','Generative designs','Building demolition planning','Construction cost estimation'], answer: 2, explanation: 'BuildSmart lists: Analyse big data for investment, Generative designs, Predictive maintenance in coordination with 3D scans, Construction cost estimation, and Risk assessments. Building demolition planning is not listed.', ref: 'Emerging Technology page - Artificial Intelligence section' },
+  { section: 'Emerging Technology', badge: 'sec-earth', q: 'According to BuildSmart, LiDAR point cloud technology has the capacity to reduce surveying times by how much?', opts: ['30%','50%','65%','75%'], answer: 3, explanation: 'BuildSmart\'s LiDAR and Point Cloud Technology section states: Today, it already has the capacity to reduce surveying times by 75%, eliminate 40% of construction reworks and identify system deterioration before it takes place.', ref: 'Emerging Technology page - LiDAR and Point Cloud Technology section' },
+  { section: 'Emerging Technology', badge: 'sec-earth', q: 'According to BuildSmart, approximately what percentage of all new homes in Australia are currently modular?', opts: ['1 to 2 percent','5 to 8 percent','12 to 15 percent','20 to 25 percent'], answer: 1, explanation: 'BuildSmart\'s Modular/Prefabricated Construction section states: Approximately 5-8% of all new homes in Australia are modular at the moment.', ref: 'Emerging Technology page - Modular/Prefabricated Construction section' }
+];
+
+var sectionColors = { 'Home Page': '#2e7d32', 'Smart Construction': '#388e3c', 'Sustainable Buildings': '#00796b', 'Emerging Technology': '#8d6018' };
+var shuffled = [], current = 0, score = 0, userAnswers = [];
+
+function shuffle(arr) { return arr.slice().sort(function(){ return Math.random()-0.5; }); }
+
+function startQuiz() {
+  shuffled = shuffle(questions); current = 0; score = 0; userAnswers = [];
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  renderQ();
+}
+
+function renderQ() {
+  var q = shuffled[current];
+  var pct = (current / shuffled.length) * 100;
+  document.getElementById('prog-lbl').textContent = 'Question ' + (current+1) + ' of ' + shuffled.length;
+  document.getElementById('score-lbl').textContent = 'Score: ' + score + ' / ' + shuffled.length;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('q-badge').innerHTML = '<span class="q-section ' + q.badge + '">' + q.section + '</span>';
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('next-btn').className = 'next-btn';
+  var opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.opts.forEach(function(opt, i) {
+    var btn = document.createElement('button');
+    btn.className = 'opt'; btn.textContent = opt;
+    btn.onclick = function(){ select(i); };
+    opts.appendChild(btn);
+  });
+}
+
+function select(idx) {
+  var q = shuffled[current];
+  var btns = document.querySelectorAll('.opt');
+  btns.forEach(function(b){ b.disabled = true; });
+  var correct = idx === q.answer;
+  if (correct) score++;
+  userAnswers.push({ correct: correct, q: q.q, section: q.section });
+  btns[q.answer].classList.add('correct');
+  if (!correct) btns[idx].classList.add('wrong');
+  var fb = document.getElementById('feedback');
+  fb.innerHTML = (correct ? 'Correct! ' : 'Not quite. ') + q.explanation + '<div class="page-ref">' + q.ref + '</div>';
+  fb.className = 'feedback show ' + (correct ? 'correct' : 'wrong');
+  document.getElementById('score-lbl').textContent = 'Score: ' + score + ' / ' + shuffled.length;
+  var nb = document.getElementById('next-btn');
+  nb.className = 'next-btn show';
+  nb.textContent = current < shuffled.length-1 ? 'Next Question' : 'See My Results';
+}
+
+function nextQ() {
+  current++;
+  if (current >= shuffled.length) { showResults(); return; }
+  renderQ();
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('results').classList.add('show');
+  var pct = Math.round((score / shuffled.length) * 100);
+  var bg, title, sub;
+  if (pct >= 90) { bg='linear-gradient(135deg,#1b5e20,#2e7d32)'; title='BuildSmart Expert!'; sub='Outstanding - you know the BuildSmart content inside out. Excellent work across all four sections.'; }
+  else if (pct >= 75) { bg='linear-gradient(135deg,#2e7d32,#388e3c)'; title='Strong Performance!'; sub='Great work! You clearly know the BuildSmart content well. Revisit the sections where you lost marks.'; }
+  else if (pct >= 55) { bg='linear-gradient(135deg,#00796b,#26a69a)'; title='Good Foundation'; sub='Solid effort. Spend some more time on the Emerging Technology and Sustainable Buildings pages and you will do even better.'; }
+  else if (pct >= 35) { bg='linear-gradient(135deg,#c8922a,#e0a040)'; title='Keep Exploring'; sub='There is more to discover! Head back through each section of BuildSmart and try again - all the answers are right there.'; }
+  else { bg='linear-gradient(135deg,#555f4a,#8e9480)'; title='Just Getting Started'; sub='Do not worry - this quiz is designed to send you back to the content! Explore each page and try again.'; }
+  document.getElementById('score-circle').style.background = bg;
+  document.getElementById('final-num').textContent = score;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-sub').textContent = sub;
+  var sections = ['Home Page','Smart Construction','Sustainable Buildings','Emerging Technology'];
+  var sdata = {};
+  sections.forEach(function(s){ sdata[s]={correct:0,total:0}; });
+  shuffled.forEach(function(q,i){ sdata[q.section].total++; if(userAnswers[i]&&userAnswers[i].correct) sdata[q.section].correct++; });
+  document.getElementById('sb-rows').innerHTML = sections.map(function(s){
+    var d=sdata[s]; if(!d.total) return '';
+    var p=Math.round((d.correct/d.total)*100); var col=sectionColors[s]||'#2e7d32';
+    return '<div class="sb-row"><div class="sb-name">'+s+'</div><div class="sb-track"><div class="sb-fill" style="width:'+p+'%;background:'+col+';"></div></div><div class="sb-score">'+d.correct+'/'+d.total+'</div></div>';
+  }).join('');
+  document.getElementById('bl-items').innerHTML = shuffled.map(function(q,i){
+    var ua=userAnswers[i];
+    return '<div class="bl-item"><span>'+(ua&&ua.correct?'✅':'❌')+'</span><span style="color:'+(ua&&ua.correct?'#1b5e20':'#991b1b')+';font-size:0.83rem;">'+q.q+'</span></div>';
+  }).join('');
+}
+
+function restart() {
+  document.getElementById('results').classList.remove('show');
+  startQuiz();
+}
+</script>
+</body>
+</html>
