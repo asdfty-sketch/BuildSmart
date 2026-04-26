@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIM Maturity Self-Assessment — BuildSmart</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(160deg, #0f1a2e 0%, #1a2e1a 100%);
+    min-height: 100vh; padding: 2rem 1rem; color: #e2e8f0;
+  }
+  .container { max-width: 660px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 2rem; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+  .subtitle { font-size: 0.9rem; color: #94a3b8; font-weight: 300; line-height: 1.6; }
+
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; margin-bottom: 1rem; backdrop-filter: blur(8px); }
+
+  .dimension-title { font-size: 0.95rem; font-weight: 600; color: white; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
+  .dimension-desc { font-size: 0.82rem; color: #94a3b8; margin-bottom: 1rem; line-height: 1.5; }
+
+  .level-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .level-btn {
+    flex: 1; min-width: 80px; padding: 0.6rem 0.5rem; border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04);
+    font-family: 'DM Sans', sans-serif; font-size: 0.78rem; color: #94a3b8;
+    cursor: pointer; text-align: center; transition: all 0.15s; line-height: 1.3;
+  }
+  .level-btn:hover { border-color: #3b82f6; color: #93c5fd; background: rgba(59,130,246,0.1); }
+  .level-btn.sel-0 { border-color: #6b7280; background: rgba(107,114,128,0.2); color: #d1d5db; }
+  .level-btn.sel-1 { border-color: #f59e0b; background: rgba(245,158,11,0.2); color: #fcd34d; }
+  .level-btn.sel-2 { border-color: #3b82f6; background: rgba(59,130,246,0.2); color: #93c5fd; }
+  .level-btn.sel-3 { border-color: #10b981; background: rgba(16,185,129,0.2); color: #6ee7b7; }
+  .level-btn.sel-4 { border-color: #8b5cf6; background: rgba(139,92,246,0.2); color: #c4b5fd; }
+
+  .level-num { font-family: 'DM Mono', monospace; font-size: 1rem; font-weight: 600; display: block; margin-bottom: 3px; }
+
+  /* Result */
+  .result-card {
+    background: rgba(255,255,255,0.06); border: 1.5px solid rgba(99,179,237,0.3);
+    border-radius: 16px; padding: 2rem; margin-top: 1.5rem;
+  }
+  .maturity-bar-wrap { margin: 1.5rem 0; }
+  .maturity-bar-label { display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #64748b; margin-bottom: 0.4rem; }
+  .maturity-track { height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; position: relative; }
+  .maturity-fill { height: 100%; border-radius: 6px; transition: width 0.8s ease; }
+
+  .level-badge { display: inline-block; padding: 6px 18px; border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 500; margin-bottom: 1rem; }
+
+  .result-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; margin-bottom: 0.5rem; }
+  .result-desc { font-size: 0.88rem; color: #94a3b8; line-height: 1.7; margin-bottom: 1.25rem; }
+
+  .next-steps h3 { font-size: 0.85rem; font-weight: 600; color: #60a5fa; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'DM Mono', monospace; }
+  .next-steps ul { list-style: none; }
+  .next-steps li { font-size: 0.85rem; color: #cbd5e1; padding: 0.35rem 0; display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.5; }
+  .next-steps li::before { content: '→'; color: #3b82f6; flex-shrink: 0; }
+
+  .dim-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1.25rem; }
+  .dim-score-row { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 0.6rem 0.8rem; }
+  .dim-score-name { font-size: 0.75rem; color: #64748b; margin-bottom: 4px; }
+  .dim-score-bar { height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .dim-score-fill { height: 100%; border-radius: 3px; transition: width 0.6s; }
+  .dim-score-val { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #93c5fd; margin-top: 3px; }
+
+  .disclaimer { margin-top: 1.25rem; font-size: 0.75rem; color: #475569; line-height: 1.6; padding: 0.75rem 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #3b82f6; }
+  .branding { text-align: right; margin-top: 1rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: #475569; }
+  .branding span { color: #3b82f6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="eyebrow">Interactive Tool · BuildSmart</div>
+    <h1>BIM Maturity Self-Assessment</h1>
+    <p class="subtitle">Rate your organisation's current BIM capability across six key dimensions. Each dimension uses the industry-standard 0–4 maturity scale aligned with the Bew-Richards BIM Maturity Model.</p>
+  </div>
+
+  <div id="dimensions"></div>
+
+  <div class="result-card" id="result">
+    <div class="level-badge" id="lvl-badge">Select all dimensions above</div>
+    <div class="result-title" id="res-title">Rate each dimension to see your assessment</div>
+    <div class="result-desc" id="res-desc">Your BIM maturity profile will appear here once you have rated all six dimensions below.</div>
+    <div class="maturity-bar-wrap">
+      <div class="maturity-bar-label">
+        <span>Level 0 — Unmanaged</span>
+        <span>Level 4 — Optimised</span>
+      </div>
+      <div class="maturity-track"><div class="maturity-fill" id="mat-fill" style="width:0%; background: #6b7280;"></div></div>
+    </div>
+    <div class="dim-scores" id="dim-scores"></div>
+    <div class="next-steps" id="next-steps"></div>
+    <div class="disclaimer">This assessment is based on the Bew-Richards BIM Maturity Model and is for educational and reflective purposes only. For a formal BIM capability assessment, consult an accredited BIM professional or refer to ISO 19650.</div>
+  </div>
+  <div class="branding">Powered by <span>BuildSmart</span> · Educational Use Only</div>
+</div>
+
+<script>
+const dims = [
+  {
+    id: 'd1', icon: '📄', name: 'Data & Documents',
+    desc: 'How your organisation manages drawings, models, and project information.',
+    levels: ['Paper-based, unstructured', 'CAD files, basic folder structure', 'Coordinated 3D models (BIM Level 1)', 'Shared data environment (BIM Level 2)', 'Integrated, automated data flows (Level 3+)']
+  },
+  {
+    id: 'd2', icon: '👥', name: 'People & Culture',
+    desc: 'BIM skills, training, and organisational adoption across your team.',
+    levels: ['No BIM awareness or training', 'Awareness but limited skills', 'Key staff trained, patchy adoption', 'Majority trained, BIM champions in place', 'Organisation-wide BIM culture & CPD']
+  },
+  {
+    id: 'd3', icon: '⚙️', name: 'Process & Workflow',
+    desc: 'How BIM is integrated into project delivery and design workflows.',
+    levels: ['Ad hoc, no BIM processes', 'BIM used on some projects informally', 'Defined BIM Execution Plan (BEP) on projects', 'Standardised BIM workflows across projects', 'Continuous improvement, ISO 19650 aligned']
+  },
+  {
+    id: 'd4', icon: '💻', name: 'Technology & Tools',
+    desc: 'Software, hardware, and IT infrastructure supporting BIM delivery.',
+    levels: ['2D CAD only', 'Some 3D software, no collaboration tools', 'BIM authoring tools (Revit, ArchiCAD etc.)', 'Common Data Environment (CDE) in use', 'Cloud-native, AI-assisted BIM platform']
+  },
+  {
+    id: 'd5', icon: '📏', name: 'Standards & Compliance',
+    desc: 'Alignment with national and international BIM standards and mandates.',
+    levels: ['No awareness of standards', 'Aware but not implemented', 'National BIM Guide reference', 'ISO 19650 Part 1 & 2 aligned', 'Certified ISO 19650 compliance']
+  },
+  {
+    id: 'd6', icon: '📊', name: 'Value & Outcomes',
+    desc: 'How your organisation measures and realises value from BIM investment.',
+    levels: ['No measurement of BIM ROI', 'Anecdotal benefits observed', 'Tracking cost/time savings on projects', 'Documented ROI with KPIs', 'Strategic value delivered across portfolio']
+  },
+];
+
+const state = {};
+dims.forEach(d => { state[d.id] = null; });
+
+function buildUI() {
+  const cont = document.getElementById('dimensions');
+  dims.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="dimension-title">${d.icon} ${d.name}</div>
+      <div class="dimension-desc">${d.desc}</div>
+      <div class="level-btns" id="btns-${d.id}">
+        ${d.levels.map((l, i) => `
+          <button class="level-btn" onclick="selectLevel('${d.id}', ${i})">
+            <span class="level-num">${i}</span>${l}
+          </button>
+        `).join('')}
+      </div>
+    `;
+    cont.appendChild(card);
+  });
+}
+
+function selectLevel(dimId, level) {
+  state[dimId] = level;
+  const btns = document.querySelectorAll(`#btns-${dimId} .level-btn`);
+  btns.forEach((b, i) => {
+    b.className = 'level-btn' + (i === level ? ` sel-${level}` : '');
+  });
+  updateResult();
+}
+
+function updateResult() {
+  const vals = Object.values(state).filter(v => v !== null);
+  if (vals.length === 0) return;
+
+  const avg = vals.reduce((a, v) => a + v, 0) / dims.length;
+  const pct = (avg / 4) * 100;
+
+  let colour, lvlText, title, desc, nextSteps;
+  if (avg >= 3.5) {
+    colour = '#8b5cf6'; lvlText = 'Level 4 — Optimised';
+    title = 'Leading BIM Capability';
+    desc = 'Your organisation demonstrates advanced, optimised BIM capability. You are operating at or near ISO 19650 Level 3+, with integrated data environments, organisation-wide culture, and measurable strategic outcomes.';
+    nextSteps = ['Pursue ISO 19650 certification to formalise your capability', 'Explore digital twin integration and advanced AI-assisted workflows', 'Share learnings — consider mentoring other firms or contributing to industry standards', 'Invest in next-generation tools: generative design, automated clash detection at scale'];
+  } else if (avg >= 2.5) {
+    colour = '#10b981'; lvlText = 'Level 3 — Defined';
+    title = 'Established BIM Practice';
+    desc = 'Your organisation has well-defined BIM processes and is producing strong outcomes. You are working at approximately BIM Level 2, with standardised workflows and a Common Data Environment. The focus now is on consistency and strategic integration.';
+    nextSteps = ['Standardise your BIM Execution Plan (BEP) template across all projects', 'Implement a formal Common Data Environment (CDE) such as ACC or Trimble Connect', 'Develop organisation-wide BIM training and CPD programme', 'Begin measuring ROI across projects to build the business case for further investment'];
+  } else if (avg >= 1.5) {
+    colour = '#3b82f6'; lvlText = 'Level 2 — Managed';
+    title = 'Developing BIM Capability';
+    desc = 'Your organisation is building BIM capability but adoption is inconsistent. Some projects use BIM effectively while others rely on traditional methods. The priority is to standardise practices and build broader team skills.';
+    nextSteps = ['Appoint a BIM Champion or BIM Manager to drive consistent adoption', 'Develop your first BIM Execution Plan (BEP) using the National BIM Guide template', 'Invest in training for Autodesk Revit, ArchiCAD, or your preferred BIM authoring tool', 'Pilot a Common Data Environment on one project before rolling out organisation-wide'];
+  } else if (avg >= 0.5) {
+    colour = '#f59e0b'; lvlText = 'Level 1 — Initial';
+    title = 'Early-Stage BIM Adoption';
+    desc = 'Your organisation is in the early stages of BIM adoption. Awareness exists but structured implementation has not yet begun. This is a critical time to invest in foundations — the right standards, tools, and people.';
+    nextSteps = ['Read the Australasian BIM Advisory Board (ABAB) National BIM Guide', 'Attend a GBCA or Master Builders BIM workshop to build leadership awareness', 'Pilot 3D modelling on one low-risk project as a learning exercise', 'Identify 1–2 staff members to become your internal BIM champions'];
+  } else {
+    colour = '#6b7280'; lvlText = 'Level 0 — Unmanaged';
+    title = 'Pre-BIM Stage';
+    desc = 'Your organisation is currently operating without BIM capability. This represents a significant opportunity — early BIM investment delivers compounding returns. Starting the journey now is far preferable to waiting for a client or government mandate.';
+    nextSteps = ['Start by watching introductory BIM videos (see our Smart Construction page)', 'Download the free National BIM Guide from abab.net.au', 'Explore free/trial versions of BIM authoring tools (Autodesk offers educational licences)', 'Engage a BIM consultant for a structured entry strategy'];
+  }
+
+  document.getElementById('mat-fill').style.width = pct + '%';
+  document.getElementById('mat-fill').style.background = colour;
+  document.getElementById('lvl-badge').textContent = lvlText;
+  document.getElementById('lvl-badge').style.background = colour + '33';
+  document.getElementById('lvl-badge').style.color = colour;
+  document.getElementById('lvl-badge').style.border = '1px solid ' + colour + '66';
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-desc').textContent = desc;
+
+  // Dim scores
+  const dimScores = document.getElementById('dim-scores');
+  dimScores.innerHTML = dims.map(d => {
+    const v = state[d.id];
+    const pct = v !== null ? (v / 4) * 100 : 0;
+    const col = v === null ? '#475569' : v >= 3 ? '#8b5cf6' : v >= 2 ? '#10b981' : v >= 1 ? '#f59e0b' : '#6b7280';
+    return `<div class="dim-score-row">
+      <div class="dim-score-name">${d.icon} ${d.name}</div>
+      <div class="dim-score-bar"><div class="dim-score-fill" style="width:${pct}%; background:${col};"></div></div>
+      <div class="dim-score-val">${v !== null ? 'Level ' + v : 'Not rated'}</div>
+    </div>`;
+  }).join('');
+
+  // Next steps
+  if (vals.length > 0) {
+    document.getElementById('next-steps').innerHTML = `
+      <h3>Recommended Next Steps</h3>
+      <ul>${nextSteps.map(s => `<li>${s}</li>`).join('')}</ul>
+    `;
+  }
+}
+
+buildUI();
+</script>
+</body>
+</html>
