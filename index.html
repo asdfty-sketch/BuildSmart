@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildSmart — Smart Construction & Sustainable Buildings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-50: #f0f7f0;
+    --green-100: #d4ecd4;
+    --green-200: #a8d8a8;
+    --green-400: #5aaa5a;
+    --green-600: #2e7d32;
+    --green-800: #1b5e20;
+    --green-900: #0a3d0a;
+    --teal-50: #e0f4f1;
+    --teal-100: #b2e3db;
+    --teal-200: #6dccc0;
+    --teal-400: #26a69a;
+    --teal-600: #00796b;
+    --teal-800: #004d40;
+    --earth-50: #fdf6ed;
+    --earth-100: #f3e0c0;
+    --earth-200: #e8c68a;
+    --earth-400: #c8922a;
+    --earth-600: #8d6018;
+    --earth-800: #5d3e0f;
+    --blue-50: #e8f4fd;
+    --blue-200: #90caf9;
+    --blue-400: #42a5f5;
+    --blue-600: #1565c0;
+    --blue-800: #0d47a1;
+    --gray-50: #f8f9f7;
+    --gray-100: #eef0eb;
+    --gray-200: #d8dcd3;
+    --gray-400: #8e9480;
+    --gray-600: #555f4a;
+    --gray-800: #2c3322;
+    --gray-900: #1a1f14;
+    --nav-h: 68px;
+    --radius: 12px;
+    --radius-sm: 6px;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: #fafaf8;
+    color: var(--gray-800);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ========== NAV ========== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--nav-h);
+    background: rgba(250,250,248,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--green-100);
+    display: flex; align-items: center;
+    padding: 0 2rem;
+    gap: 2rem;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--green-800);
+    text-decoration: none;
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .nav-logo .logo-dot {
+    width: 10px; height: 10px;
+    background: var(--teal-400);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .nav-links {
+    display: flex; gap: 0; list-style: none;
+    flex: 1; overflow-x: auto;
+  }
+
+  .nav-links a {
+    font-size: 0.82rem; font-weight: 500;
+    color: var(--gray-600); text-decoration: none;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+
+  .nav-links a:hover, .nav-links a.active {
+    background: var(--green-50);
+    color: var(--green-800);
+  }
+
+  .nav-cta {
+    background: var(--green-800); color: white;
+    border: none; border-radius: var(--radius-sm);
+    padding: 0.45rem 1.1rem;
+    font-family: var(--font-body); font-size: 0.82rem; font-weight: 500;
+    cursor: pointer; transition: background 0.15s;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--green-600); }
+
+  /* ========== PAGE SECTIONS ========== */
+  .page { display: none; padding-top: var(--nav-h); min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ========== HOME HERO ========== */
+  .hero {
+    position: relative; overflow: hidden;
+    min-height: calc(100vh - var(--nav-h));
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5rem 2rem;
+    background: linear-gradient(160deg, #f0f7f0 0%, #e0f4f1 40%, #fdf6ed 100%);
+  }
+
+  .hero-bg-pattern {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(46,125,50,0.07) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0,121,107,0.07) 0%, transparent 50%),
+      radial-gradient(circle at 60% 30%, rgba(200,146,42,0.05) 0%, transparent 40%);
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono); font-size: 0.75rem;
+    color: var(--teal-600); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 30px; height: 1px; background: var(--teal-400);
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 1.08; font-weight: 700;
+    color: var(--gray-900);
+    max-width: 780px; margin-bottom: 1.5rem;
+  }
+
+  .hero-title .accent { color: var(--green-600); }
+  .hero-title .accent2 { color: var(--teal-600); }
+
+  .hero-subtitle {
+    font-size: 1.15rem; color: var(--gray-600);
+    max-width: 560px; margin-bottom: 2.5rem; font-weight: 300;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--green-800); color: white;
+    border: none; border-radius: var(--radius);
+    padding: 0.85rem 2rem; font-family: var(--font-body);
+    font-size: 0.95rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--green-600); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent; color: var(--green-800);
+    border: 1.5px solid var(--green-400);
+    border-radius: var(--radius);
+    padding: 0.85rem 2rem; font-family: var(--font-body);
+    font-size: 0.95rem; font-weight: 500; cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-secondary:hover { background: var(--green-50); }
+
+  .hero-stats {
+    margin-top: 4rem;
+    display: flex; gap: 3rem; flex-wrap: wrap;
+    padding-top: 2rem;
+    border-top: 1px solid var(--green-100);
+  }
+
+  .hero-stat-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem; font-weight: 700; color: var(--green-800);
+  }
+
+  .hero-stat-label {
+    font-size: 0.82rem; color: var(--gray-400); margin-top: 2px;
+  }
+
+  /* ========== SECTION LAYOUT ========== */
+  .section {
+    padding: 5rem 2rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  .section-full {
+    padding: 5rem 2rem;
+  }
+
+  .section-bg-alt { background: var(--gray-50); }
+  .section-bg-green { background: linear-gradient(135deg, var(--green-50), var(--teal-50)); }
+  .section-bg-earth { background: linear-gradient(135deg, var(--earth-50), var(--green-50)); }
+
+  .section-eyebrow {
+    font-family: var(--font-mono); font-size: 0.72rem;
+    color: var(--teal-600); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700; color: var(--gray-900);
+    margin-bottom: 1rem; line-height: 1.2;
+  }
+
+  .section-desc {
+    font-size: 1.05rem; color: var(--gray-600);
+    max-width: 620px; margin-bottom: 3rem; font-weight: 300;
+  }
+
+  /* ========== CARDS ========== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    box-shadow: 0 8px 32px rgba(46,125,50,0.1);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    width: 48px; height: 48px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 1rem;
+  }
+
+  .card-icon.green { background: var(--green-50); }
+  .card-icon.teal { background: var(--teal-50); }
+  .card-icon.earth { background: var(--earth-50); }
+  .card-icon.blue { background: var(--blue-50); }
+
+  .card h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem; font-weight: 600;
+    color: var(--gray-900); margin-bottom: 0.5rem;
+  }
+
+  .card p {
+    font-size: 0.9rem; color: var(--gray-600); line-height: 1.65;
+  }
+
+  .card-tag {
+    display: inline-block; margin-top: 1rem;
+    background: var(--green-50); color: var(--green-800);
+    font-size: 0.72rem; font-weight: 500; padding: 3px 10px;
+    border-radius: 20px; font-family: var(--font-mono);
+  }
+
+  /* ========== TOPIC PAGES ========== */
+  .topic-hero {
+    padding: 4rem 2rem 3rem;
+    background: linear-gradient(160deg, var(--green-50) 0%, var(--teal-50) 100%);
+    border-bottom: 1px solid var(--green-100);
+  }
+
+  .topic-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: var(--gray-900); margin-bottom: 0.75rem;
+  }
+
+  .topic-hero p {
+    font-size: 1.1rem; color: var(--gray-600);
+    max-width: 640px; font-weight: 300;
+  }
+
+  /* ========== TWO COL LAYOUT ========== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: center;
+  }
+
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* ========== TECH PILL ========== */
+  .pill-grid {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+    margin: 1.5rem 0;
+  }
+
+  .pill {
+    background: white; border: 1px solid var(--gray-200);
+    border-radius: 20px; padding: 0.4rem 1rem;
+    font-size: 0.82rem; font-weight: 500; color: var(--gray-600);
+    transition: all 0.15s; cursor: default;
+  }
+
+  .pill.green { border-color: var(--green-200); color: var(--green-800); background: var(--green-50); }
+  .pill.teal { border-color: var(--teal-200); color: var(--teal-600); background: var(--teal-50); }
+  .pill.earth { border-color: var(--earth-200); color: var(--earth-600); background: var(--earth-50); }
+
+  /* ========== CASE STUDY ========== */
+  .case-card {
+    background: white;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .case-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+
+  .case-card-header {
+    height: 140px;
+    display: flex; align-items: flex-end;
+    padding: 1rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .case-card-body { padding: 1.5rem; }
+
+  .case-label {
+    font-family: var(--font-mono); font-size: 0.7rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+  }
+
+  .case-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--gray-900); margin-bottom: 0.6rem;
+  }
+
+  .case-meta {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .case-meta span {
+    font-size: 0.78rem; color: var(--gray-400);
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  /* ========== NEWS ========== */
+  .news-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--gray-100);
+    display: grid; grid-template-columns: auto 1fr; gap: 1.5rem;
+    align-items: start;
+  }
+
+  .news-date {
+    font-family: var(--font-mono); font-size: 0.72rem;
+    color: var(--teal-600); white-space: nowrap;
+    padding-top: 0.25rem;
+  }
+
+  .news-title { font-weight: 500; color: var(--gray-900); margin-bottom: 0.3rem; }
+  .news-snippet { font-size: 0.88rem; color: var(--gray-600); line-height: 1.6; }
+
+  .news-tag {
+    display: inline-block; margin-top: 0.5rem;
+    font-size: 0.68rem; font-weight: 500; padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .news-tag.tech { background: var(--teal-50); color: var(--teal-600); }
+  .news-tag.policy { background: var(--earth-50); color: var(--earth-600); }
+  .news-tag.research { background: var(--blue-50); color: var(--blue-600); }
+
+  /* ========== BLOG ========== */
+  .blog-featured {
+    background: linear-gradient(135deg, var(--green-800), var(--teal-600));
+    border-radius: var(--radius); padding: 3rem;
+    color: white; margin-bottom: 2rem;
+    position: relative; overflow: hidden;
+  }
+
+  .blog-featured::after {
+    content: '';
+    position: absolute; right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .blog-featured-eyebrow {
+    font-family: var(--font-mono); font-size: 0.7rem;
+    color: var(--green-200); text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-featured h2 {
+    font-family: var(--font-display); font-size: 1.9rem;
+    font-weight: 700; margin-bottom: 0.75rem; max-width: 540px;
+    color: white;
+  }
+
+  .blog-featured p { font-size: 0.95rem; opacity: 0.85; max-width: 480px; }
+
+  .blog-read-more {
+    display: inline-block; margin-top: 1.5rem;
+    background: rgba(255,255,255,0.15); color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: var(--radius-sm); padding: 0.5rem 1.25rem;
+    font-size: 0.85rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .blog-read-more:hover { background: rgba(255,255,255,0.25); }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .blog-card {
+    background: white; border: 1px solid var(--gray-100);
+    border-radius: var(--radius); overflow: hidden;
+    cursor: pointer; transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .blog-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); transform: translateY(-2px); }
+
+  .blog-card-img {
+    height: 120px; width: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+  }
+
+  .blog-card-body { padding: 1.25rem; }
+  .blog-card-cat {
+    font-family: var(--font-mono); font-size: 0.68rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--teal-600); margin-bottom: 0.4rem;
+  }
+  .blog-card h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--gray-900); margin-bottom: 0.4rem; }
+  .blog-card p { font-size: 0.83rem; color: var(--gray-600); line-height: 1.6; }
+  .blog-card-meta { font-size: 0.72rem; color: var(--gray-400); margin-top: 0.75rem; }
+
+  /* ========== TECH PAGE ========== */
+  .tech-feature {
+    background: white; border: 1px solid var(--gray-100);
+    border-radius: var(--radius); padding: 2.5rem;
+    display: grid; grid-template-columns: 80px 1fr; gap: 2rem;
+    align-items: start; margin-bottom: 1.5rem;
+  }
+
+  .tech-icon {
+    width: 80px; height: 80px;
+    border-radius: var(--radius); display: flex;
+    align-items: center; justify-content: center; font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .tech-feature h3 {
+    font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
+    color: var(--gray-900); margin-bottom: 0.5rem;
+  }
+
+  .tech-feature p { font-size: 0.92rem; color: var(--gray-600); line-height: 1.7; }
+
+  /* ========== INTERACTIVE QUIZ ========== */
+  .quiz-container {
+    background: white; border: 1px solid var(--gray-100);
+    border-radius: var(--radius); padding: 2.5rem;
+    max-width: 640px;
+  }
+
+  .quiz-q { font-weight: 500; color: var(--gray-900); margin-bottom: 1.25rem; font-size: 1.05rem; }
+
+  .quiz-opts { display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .quiz-opt {
+    background: var(--gray-50); border: 1.5px solid var(--gray-100);
+    border-radius: var(--radius-sm); padding: 0.85rem 1.1rem;
+    cursor: pointer; font-size: 0.92rem; color: var(--gray-700);
+    transition: all 0.15s; text-align: left;
+    font-family: var(--font-body);
+  }
+  .quiz-opt:hover { border-color: var(--green-400); background: var(--green-50); color: var(--green-800); }
+  .quiz-opt.correct { border-color: var(--green-400); background: var(--green-50); color: var(--green-800); }
+  .quiz-opt.wrong { border-color: #e53935; background: #fff5f5; color: #b71c1c; }
+
+  .quiz-feedback {
+    margin-top: 1rem; padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-sm); font-size: 0.9rem;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: var(--green-50); color: var(--green-800); border: 1px solid var(--green-200); }
+  .quiz-feedback.wrong { background: #fff5f5; color: #b71c1c; border: 1px solid #ffcdd2; }
+
+  .quiz-next {
+    margin-top: 1.25rem;
+    background: var(--green-800); color: white;
+    border: none; border-radius: var(--radius-sm);
+    padding: 0.65rem 1.5rem; font-family: var(--font-body);
+    font-size: 0.9rem; font-weight: 500; cursor: pointer;
+    display: none; transition: background 0.15s;
+  }
+  .quiz-next.show { display: inline-block; }
+  .quiz-next:hover { background: var(--green-600); }
+
+  .quiz-score {
+    font-family: var(--font-mono); font-size: 0.8rem;
+    color: var(--gray-400); margin-top: 1.5rem;
+  }
+
+  /* ========== CONTACT FORM ========== */
+  .contact-form {
+    max-width: 580px;
+    background: white; border: 1px solid var(--gray-100);
+    border-radius: var(--radius); padding: 2.5rem;
+  }
+
+  .form-group { margin-bottom: 1.5rem; }
+
+  .form-label {
+    display: block; font-size: 0.82rem; font-weight: 500;
+    color: var(--gray-600); margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 0.92rem;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    transition: border-color 0.15s, background 0.15s;
+    outline: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--green-400); background: white;
+  }
+
+  .form-textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+  .form-submit {
+    background: var(--green-800); color: white;
+    border: none; border-radius: var(--radius-sm);
+    padding: 0.85rem 2.5rem; font-family: var(--font-body);
+    font-size: 0.95rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s;
+    width: 100%;
+  }
+  .form-submit:hover { background: var(--green-600); }
+
+  .form-success {
+    background: var(--green-50); border: 1px solid var(--green-200);
+    color: var(--green-800); border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem; margin-top: 1rem;
+    font-size: 0.9rem; display: none;
+  }
+  .form-success.show { display: block; }
+
+  /* ========== REFS ========== */
+  .ref-item {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--gray-100);
+    display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem;
+  }
+
+  .ref-num {
+    font-family: var(--font-mono); font-size: 0.8rem;
+    color: var(--teal-600); font-weight: 500; padding-top: 0.1rem;
+  }
+
+  .ref-text { font-size: 0.88rem; color: var(--gray-700); line-height: 1.65; }
+  .ref-text strong { color: var(--gray-900); }
+  .ref-text em { color: var(--gray-500); }
+
+  /* ========== FOOTER ========== */
+  footer {
+    background: var(--gray-900); color: var(--gray-400);
+    padding: 3rem 2rem 2rem;
+  }
+
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem;
+  }
+
+  @media (max-width: 700px) {
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+  }
+
+  .footer-brand {
+    font-family: var(--font-display); font-size: 1.3rem;
+    font-weight: 700; color: white; margin-bottom: 0.75rem;
+  }
+
+  .footer-col h4 { font-size: 0.78rem; font-weight: 600; color: var(--gray-200); margin-bottom: 0.9rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 0.5rem; }
+  .footer-links a { font-size: 0.85rem; color: var(--gray-400); text-decoration: none; cursor: pointer; transition: color 0.15s; }
+  .footer-links a:hover { color: var(--green-200); }
+
+  .footer-bottom {
+    max-width: 1100px; margin: 2rem auto 0;
+    padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.78rem; color: var(--gray-600);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+  }
+
+  /* ========== RATING WIDGET ========== */
+  .rating-stars { display: flex; gap: 6px; margin: 0.75rem 0; }
+  .star { font-size: 1.5rem; cursor: pointer; color: var(--gray-200); transition: color 0.1s; }
+  .star.lit { color: var(--earth-400); }
+
+  /* ========== DIAGRAM ========== */
+  .diagram-svg { width: 100%; max-width: 700px; display: block; margin: 1.5rem auto; }
+
+  /* ========== INFOGRAPHIC STATS ========== */
+  .stat-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem; margin: 2rem 0;
+  }
+
+  .stat-box {
+    background: white; border: 1px solid var(--gray-100);
+    border-radius: var(--radius); padding: 1.5rem; text-align: center;
+  }
+
+  .stat-box .num {
+    font-family: var(--font-display); font-size: 2.5rem; font-weight: 700;
+    line-height: 1; margin-bottom: 0.35rem;
+  }
+
+  .stat-box .num.green { color: var(--green-600); }
+  .stat-box .num.teal { color: var(--teal-600); }
+  .stat-box .num.earth { color: var(--earth-600); }
+
+  .stat-box .label { font-size: 0.82rem; color: var(--gray-500); line-height: 1.4; }
+
+  /* ========== VIDEO EMBED PLACEHOLDER ========== */
+  .video-card {
+    background: var(--gray-900); border-radius: var(--radius);
+    overflow: hidden; aspect-ratio: 16/9;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem; cursor: pointer;
+    position: relative;
+    transition: transform 0.15s;
+  }
+  .video-card:hover { transform: scale(1.01); }
+
+  .video-play {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; color: white;
+    transition: background 0.15s;
+  }
+  .video-card:hover .video-play { background: rgba(255,255,255,0.25); }
+  .video-caption { color: rgba(255,255,255,0.75); font-size: 0.9rem; font-weight: 500; text-align: center; padding: 0 1rem; }
+
+  /* ========== ACCORDION ========== */
+  .accordion { border: 1px solid var(--gray-100); border-radius: var(--radius); overflow: hidden; }
+
+  .accordion-item { border-bottom: 1px solid var(--gray-100); }
+  .accordion-item:last-child { border-bottom: none; }
+
+  .accordion-trigger {
+    width: 100%; padding: 1.2rem 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: white; border: none; cursor: pointer;
+    font-family: var(--font-body); font-size: 0.95rem; font-weight: 500;
+    color: var(--gray-900); text-align: left;
+    transition: background 0.15s;
+  }
+  .accordion-trigger:hover { background: var(--gray-50); }
+
+  .accordion-icon { font-size: 1.2rem; color: var(--gray-400); transition: transform 0.2s; }
+  .accordion-trigger.open .accordion-icon { transform: rotate(45deg); color: var(--green-600); }
+
+  .accordion-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.2s;
+    background: var(--gray-50);
+  }
+  .accordion-body.open { max-height: 400px; }
+
+  .accordion-body-inner { padding: 1.25rem 1.5rem; font-size: 0.92rem; color: var(--gray-600); line-height: 1.7; }
+
+  /* ========== BREADCRUMB ========== */
+  .breadcrumb {
+    font-size: 0.78rem; color: var(--gray-400);
+    margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px;
+  }
+  .breadcrumb span { cursor: pointer; }
+  .breadcrumb span:hover { color: var(--green-600); }
+
+  /* ========== SEARCH BAR ========== */
+  .search-bar {
+    display: flex; gap: 0.5rem; max-width: 420px; margin-bottom: 2.5rem;
+  }
+
+  .search-input {
+    flex: 1; padding: 0.65rem 1rem;
+    border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 0.9rem;
+    color: var(--gray-800); background: white; outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--green-400); }
+
+  .search-btn {
+    background: var(--green-800); color: white; border: none;
+    border-radius: var(--radius-sm); padding: 0 1.25rem;
+    font-size: 0.9rem; cursor: pointer; transition: background 0.15s;
+  }
+  .search-btn:hover { background: var(--green-600); }
+
+  /* ========== PROGRESS BAR ========== */
+  .progress-row { margin: 0.75rem 0; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.83rem; color: var(--gray-600); margin-bottom: 0.35rem; }
+  .progress-track { background: var(--gray-100); border-radius: 20px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 20px; transition: width 1s ease; }
+
+  /* ========== ANIMATE ON SCROLL ========== */
+  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* ========== TOOLTIP ========== */
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-box {
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--gray-900); color: white;
+    font-size: 0.75rem; padding: 6px 10px; border-radius: var(--radius-sm);
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.15s;
+    z-index: 10;
+  }
+  .tooltip-wrap:hover .tooltip-box { opacity: 1; }
+
+  /* ========== GLOSSARY ========== */
+  .glossary-term {
+    padding: 1.1rem 0; border-bottom: 1px solid var(--gray-100);
+    display: grid; grid-template-columns: 200px 1fr; gap: 1.5rem;
+  }
+
+  .glossary-term dt { font-weight: 600; color: var(--green-800); font-size: 0.92rem; }
+  .glossary-term dd { font-size: 0.88rem; color: var(--gray-700); line-height: 1.65; }
+
+  /* ========== ENERGY CALCULATOR ========== */
+  .calc-output {
+    background: var(--green-50); border: 1px solid var(--green-100);
+    border-radius: var(--radius-sm); padding: 1.25rem 1.5rem;
+    margin-top: 1rem;
+  }
+  .calc-output .calc-result-num {
+    font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--green-800);
+  }
+  .calc-output .calc-result-label { font-size: 0.82rem; color: var(--green-600); margin-top: 0.2rem; }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="main-nav">
+  <a class="nav-logo" href="#" onclick="showPage('home')">
+    <span class="logo-dot"></span>
+    BuildSmart
+  </a>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('smart-construction')" id="nav-smart-construction">Smart Construction</a></li>
+    <li><a onclick="showPage('sustainable-buildings')" id="nav-sustainable-buildings">Sustainable Buildings</a></li>
+    <li><a onclick="showPage('technology')" id="nav-technology">Technology</a></li>
+    <li><a onclick="showPage('case-studies')" id="nav-case-studies">Case Studies</a></li>
+    <li><a onclick="showPage('news')" id="nav-news">News</a></li>
+    <li><a onclick="showPage('blog')" id="nav-blog">Blog</a></li>
+    <li><a onclick="showPage('resources')" id="nav-resources">Resources</a></li>
+    <li><a onclick="showPage('references')" id="nav-references">References</a></li>
+    <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" onclick="showPage('contact')">Get in Touch</a>
+</nav>
+
+<!-- ============================= HOME ============================= -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-eyebrow">Educational · Research · Consulting</div>
+    <h1 class="hero-title">
+      Building a <span class="accent">Smarter</span>,<br>
+      <span class="accent2">Greener</span> Future
+    </h1>
+    <p class="hero-subtitle">
+      An educational and research hub exploring smart construction technologies,
+      sustainable building practices, and the innovations shaping our built environment.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showPage('smart-construction')">Explore Topics</button>
+      <button class="btn-secondary" onclick="showPage('case-studies')">View Case Studies</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">39%</div>
+        <div class="hero-stat-label">of global CO₂ emissions<br>from buildings</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">50%</div>
+        <div class="hero-stat-label">energy savings possible<br>with smart systems</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">$1.6T</div>
+        <div class="hero-stat-label">global green building<br>market by 2030</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">4.5B</div>
+        <div class="hero-stat-label">people expected in urban<br>areas by 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO IS THIS FOR -->
+  <div class="section-full section-bg-alt">
+    <div class="section" style="padding: 0;">
+      <div class="section-eyebrow">Our Audience</div>
+      <h2 class="section-title">Who We're Here For</h2>
+      <p class="section-desc">BuildSmart serves a wide community of professionals, students, and advocates working at the intersection of construction, sustainability, and technology.</p>
+      <div class="cards-grid">
+        <div class="card fade-in">
+          <div class="card-icon green">🏗️</div>
+          <h3>Architects & Designers</h3>
+          <p>Explore green design principles, passive systems, biophilic design, and building performance tools to inform evidence-based practice.</p>
+          <span class="card-tag">Professional</span>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon teal">🏢</div>
+          <h3>Building Managers</h3>
+          <p>Learn to leverage BMS, IoT sensors, and data analytics to optimise energy use, reduce costs, and improve occupant comfort.</p>
+          <span class="card-tag">Operational</span>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon earth">📐</div>
+          <h3>Construction Students</h3>
+          <p>Engage with current industry trends, emerging technologies, and real-world case studies to prepare for a sustainability-driven career.</p>
+          <span class="card-tag">Academic</span>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon blue">🌿</div>
+          <h3>Sustainability Advocates</h3>
+          <p>Understand policy frameworks, rating systems, and the science behind sustainable construction to amplify your advocacy work.</p>
+          <span class="card-tag">Advocacy</span>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon green">🏘️</div>
+          <h3>Property Professionals</h3>
+          <p>Assess green premiums, understand sustainability ratings, and communicate sustainability value in asset transactions.</p>
+          <span class="card-tag">Industry</span>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon teal">👤</div>
+          <h3>General Public</h3>
+          <p>Discover how smart, sustainable homes can reduce energy bills, improve health outcomes, and support a liveable planet.</p>
+          <span class="card-tag">Consumer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK TOPICS -->
+  <div class="section-full">
+    <div class="section" style="padding: 0;">
+      <div class="section-eyebrow">Key Topics</div>
+      <h2 class="section-title">What You'll Find Here</h2>
+      <div class="cards-grid">
+        <div class="card fade-in" onclick="showPage('smart-construction')" style="cursor:pointer; border-left: 3px solid var(--green-400);">
+          <h3>Smart Construction</h3>
+          <p>BIM, prefabrication, robotics, digital twins, modular building, and data-driven project management.</p>
+        </div>
+        <div class="card fade-in" onclick="showPage('sustainable-buildings')" style="cursor:pointer; border-left: 3px solid var(--teal-400);">
+          <h3>Sustainable Buildings</h3>
+          <p>Green ratings, passive design, embodied carbon, biophilic architecture, and the circular economy in construction.</p>
+        </div>
+        <div class="card fade-in" onclick="showPage('technology')" style="cursor:pointer; border-left: 3px solid var(--earth-400);">
+          <h3>Emerging Technologies</h3>
+          <p>AI, IoT, AR/VR, 3D printing, smart glass, energy harvesting materials, and next-generation HVAC.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE QUIZ PREVIEW -->
+  <div class="section-full section-bg-green">
+    <div class="section" style="padding: 0;">
+      <div class="section-eyebrow">Test Your Knowledge</div>
+      <h2 class="section-title">Quick Knowledge Check</h2>
+      <p class="section-desc">How much do you know about smart construction? Try a question below.</p>
+      <div id="home-quiz" class="quiz-container">
+        <div class="quiz-q" id="hq-text">Q: What does the acronym 'BIM' stand for in construction?</div>
+        <div class="quiz-opts" id="hq-opts">
+          <button class="quiz-opt" onclick="homeQuiz(this, false)">Building Impact Modelling</button>
+          <button class="quiz-opt" onclick="homeQuiz(this, true)">Building Information Modelling</button>
+          <button class="quiz-opt" onclick="homeQuiz(this, false)">Biometric Infrastructure Management</button>
+          <button class="quiz-opt" onclick="homeQuiz(this, false)">Built-in Integration Mapping</button>
+        </div>
+        <div class="quiz-feedback" id="hq-feedback"></div>
+        <button class="quiz-next" id="hq-next" onclick="showPage('technology')">Explore Technology →</button>
+        <div class="quiz-score" id="hq-score"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- =================== SMART CONSTRUCTION =================== -->
+<div class="page" id="page-smart-construction">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › Smart Construction</div>
+      <h1>Smart Construction</h1>
+      <p>How digital technologies, advanced materials, and integrated workflows are transforming the way we design, plan, and build.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Overview</div>
+    <h2 class="section-title">What Is Smart Construction?</h2>
+    <div class="two-col">
+      <div>
+        <p style="color: var(--gray-600); margin-bottom: 1rem; font-size: 1rem;">Smart construction integrates digital technologies, data analytics, automation, and collaborative processes to improve the efficiency, safety, quality, and sustainability of construction projects across their full lifecycle.</p>
+        <p style="color: var(--gray-600); font-size: 1rem;">Unlike traditional construction, which is often fragmented, reactive, and paper-based, smart construction is characterised by real-time information sharing, predictive decision-making, and deep integration between design, procurement, site delivery, and facilities management.</p>
+        <div class="pill-grid" style="margin-top: 1.5rem;">
+          <span class="pill green">Digital Twins</span>
+          <span class="pill teal">BIM</span>
+          <span class="pill earth">Robotics</span>
+          <span class="pill green">IoT Sensors</span>
+          <span class="pill teal">Prefabrication</span>
+          <span class="pill earth">Drones</span>
+          <span class="pill green">AI Planning</span>
+          <span class="pill teal">Lean Construction</span>
+        </div>
+      </div>
+      <div>
+        <!-- SVG Diagram: Smart Construction Pillars -->
+        <svg viewBox="0 0 360 320" class="diagram-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grd1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2e7d32"/>
+              <stop offset="100%" stop-color="#00796b"/>
+            </linearGradient>
+          </defs>
+          <!-- Centre -->
+          <circle cx="180" cy="160" r="50" fill="url(#grd1)" opacity="0.95"/>
+          <text x="180" y="154" text-anchor="middle" font-family="Playfair Display" font-size="11" font-weight="700" fill="white">Smart</text>
+          <text x="180" y="170" text-anchor="middle" font-family="Playfair Display" font-size="11" font-weight="700" fill="white">Construction</text>
+          <!-- Surrounding nodes -->
+          <circle cx="180" cy="60" r="34" fill="#d4ecd4" stroke="#a8d8a8" stroke-width="1.5"/>
+          <text x="180" y="55" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#1b5e20">BIM &amp;</text>
+          <text x="180" y="68" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#1b5e20">Digital</text>
+
+          <circle cx="285" cy="115" r="34" fill="#e0f4f1" stroke="#6dccc0" stroke-width="1.5"/>
+          <text x="285" y="110" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#004d40">IoT &amp;</text>
+          <text x="285" y="123" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#004d40">Sensors</text>
+
+          <circle cx="285" cy="205" r="34" fill="#fdf6ed" stroke="#e8c68a" stroke-width="1.5"/>
+          <text x="285" y="200" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#5d3e0f">Robotics</text>
+          <text x="285" y="213" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#5d3e0f">&amp; Auto.</text>
+
+          <circle cx="180" cy="260" r="34" fill="#e8f4fd" stroke="#90caf9" stroke-width="1.5"/>
+          <text x="180" y="255" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#0d47a1">Prefab &amp;</text>
+          <text x="180" y="268" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#0d47a1">Modular</text>
+
+          <circle cx="75" cy="205" r="34" fill="#f0f7f0" stroke="#a8d8a8" stroke-width="1.5"/>
+          <text x="75" y="200" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#1b5e20">Data &amp;</text>
+          <text x="75" y="213" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#1b5e20">Analytics</text>
+
+          <circle cx="75" cy="115" r="34" fill="#e0f4f1" stroke="#6dccc0" stroke-width="1.5"/>
+          <text x="75" y="110" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#004d40">Safety</text>
+          <text x="75" y="123" text-anchor="middle" font-size="9.5" font-family="DM Sans" font-weight="600" fill="#004d40">Tech</text>
+
+          <!-- Connectors -->
+          <line x1="180" y1="110" x2="180" y2="94" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="224" y1="130" x2="251" y2="125" stroke="#00796b" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="224" y1="188" x2="251" y2="196" stroke="#c8922a" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="180" y1="210" x2="180" y2="226" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="136" y1="188" x2="109" y2="196" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="136" y1="130" x2="109" y2="125" stroke="#00796b" stroke-width="1.5" stroke-dasharray="4,3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIM SECTION -->
+  <div class="section-full section-bg-alt">
+    <div class="section" style="padding: 0;">
+      <div class="section-eyebrow">Core Technology</div>
+      <h2 class="section-title">Building Information Modelling (BIM)</h2>
+      <p class="section-desc">BIM is the process of creating and managing digital representations of physical and functional characteristics of a building, enabling collaboration across the entire project lifecycle.</p>
+
+      <div class="stat-row">
+        <div class="stat-box fade-in">
+          <div class="num green">30%</div>
+          <div class="label">reduction in project costs with mature BIM adoption</div>
+        </div>
+        <div class="stat-box fade-in">
+          <div class="num teal">50%</div>
+          <div class="label">fewer errors and rework through clash detection</div>
+        </div>
+        <div class="stat-box fade-in">
+          <div class="num earth">20%</div>
+          <div class="label">improvement in construction schedule predictability</div>
+        </div>
+        <div class="stat-box fade-in">
+          <div class="num green">7×</div>
+          <div class="label">ROI reported by early BIM adopters in Australia</div>
+        </div>
+      </div>
+
+      <div class="accordion fade-in">
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">
+            What are the dimensions of BIM (3D–7D)? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              BIM extends beyond 3D geometry. 4D BIM adds construction scheduling and sequencing. 5D BIM integrates cost estimation and quantity take-off. 6D BIM covers sustainability analysis including energy performance. 7D BIM addresses facilities management and asset lifecycle data, enabling ongoing operational decision-making long after project completion.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">
+            How does BIM support sustainability outcomes? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              6D BIM enables early-stage energy simulation, solar access analysis, daylighting studies, and lifecycle carbon modelling. By integrating sustainability analysis directly into the design process, project teams can make evidence-based decisions before construction begins — dramatically reducing the cost of change.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">
+            What is the Australian Government's BIM mandate? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              Australia has been progressively adopting BIM across government infrastructure projects. Infrastructure Australia and various state agencies now recommend or require BIM for large public projects. The National BIM Guide and the Australasian BIM Advisory Board provide frameworks and guidance for industry adoption across the construction sector.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(this)">
+            What software tools are commonly used in BIM? <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              Widely used BIM platforms include Autodesk Revit (building design), Navisworks (clash detection and coordination), Tekla Structures (structural engineering), ArchiCAD (architectural design), and Bentley OpenBuildings. Cloud-based platforms such as Autodesk Construction Cloud and Trimble Connect enable real-time collaboration and data sharing.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO PLACEHOLDERS -->
+  <div class="section">
+    <div class="section-eyebrow">Video Learning</div>
+    <h2 class="section-title">Educational Videos</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div>
+        <div class="video-card" onclick="openYT('https://www.youtube.com/watch?v=Ll7FLMnS_8I')">
+          <div class="video-play">▶</div>
+          <div class="video-caption">What is BIM? A Beginner's Guide</div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--gray-400); margin-top:0.5rem;">Duration: ~8 min · Source: YouTube</p>
+      </div>
+      <div>
+        <div class="video-card" style="background: var(--teal-800);" onclick="openYT('https://www.youtube.com/watch?v=oP7aFVuK0Ac')">
+          <div class="video-play">▶</div>
+          <div class="video-caption">Digital Twins in Construction Explained</div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--gray-400); margin-top:0.5rem;">Duration: ~12 min · Source: YouTube</p>
+      </div>
+      <div>
+        <div class="video-card" style="background: var(--earth-800);" onclick="openYT('https://www.youtube.com/watch?v=N_Nkb78nBOo')">
+          <div class="video-play">▶</div>
+          <div class="video-caption">Construction Robots: The Future of Building</div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--gray-400); margin-top:0.5rem;">Duration: ~15 min · Source: YouTube</p>
+      </div>
+    </div>
+    <p style="font-size:0.8rem; color:var(--gray-400); margin-top:1rem;">Videos open on YouTube. BuildSmart does not host or own these third-party resources.</p>
+  </div>
+</div>
+
+<!-- =================== SUSTAINABLE BUILDINGS =================== -->
+<div class="page" id="page-sustainable-buildings">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › Sustainable Buildings</div>
+      <h1>Sustainable Buildings</h1>
+      <p>Understanding green rating systems, passive design, embodied carbon, and the principles guiding Australia's transition to net-zero buildings.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">The Challenge</div>
+    <h2 class="section-title">Why Buildings Matter for Climate</h2>
+    <div class="two-col">
+      <div>
+        <p style="color: var(--gray-600); margin-bottom: 1rem;">Buildings are responsible for approximately 39% of global energy-related carbon dioxide emissions — 28% from operational energy use and 11% from embodied carbon in materials and construction. Addressing building performance is therefore central to meeting global climate targets.</p>
+        <p style="color: var(--gray-600);">In Australia, the built environment accounts for around 25% of national greenhouse gas emissions, with significant potential for reduction through improved design standards, retrofitting, and the adoption of renewable energy systems.</p>
+      </div>
+      <div>
+        <div class="progress-row">
+          <div class="progress-label"><span>Operational Energy</span><span>28%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width: 72%; background: var(--green-600);" data-width="72"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>Embodied Carbon</span><span>11%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width: 28%; background: var(--teal-600);" data-width="28"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>Transport</span><span>16%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width: 41%; background: var(--earth-600);" data-width="41"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label"><span>Industry</span><span>31%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width: 80%; background: var(--gray-400);" data-width="80"></div></div>
+        </div>
+        <p style="font-size:0.75rem; color:var(--gray-400); margin-top:0.75rem;">Global CO₂ emissions by sector (approximate). Source: IEA / IPCC</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GREEN RATINGS -->
+  <div class="section-full section-bg-alt">
+    <div class="section" style="padding: 0;">
+      <div class="section-eyebrow">Rating Systems</div>
+      <h2 class="section-title">Green Building Rating Systems</h2>
+      <p class="section-desc">Rating systems provide a consistent framework for assessing and communicating building sustainability performance.</p>
+      <div class="cards-grid">
+        <div class="card fade-in">
+          <div class="card-icon green">⭐</div>
+          <h3>Green Star (Australia)</h3>
+          <p>Administered by the Green Building Council of Australia, Green Star rates commercial, residential, and community buildings on categories including energy, water, indoor quality, and innovation. A 6-Star rating represents world leadership.</p>
+          <div style="margin-top:1rem; font-size:0.8rem; color:var(--gray-400);">Operator: GBCA · Ratings: 4–6 Stars</div>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon teal">🏆</div>
+          <h3>NABERS</h3>
+          <p>The National Australian Built Environment Rating System measures operational performance — how a building actually performs, not how it was designed. It covers energy, water, waste, and indoor environment quality.</p>
+          <div style="margin-top:1rem; font-size:0.8rem; color:var(--gray-400);">Operator: NSW Govt · Scale: 0–6 Stars</div>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon earth">🌍</div>
+          <h3>LEED</h3>
+          <p>Leadership in Energy and Environmental Design is the world's most widely used green building rating system, developed by the US Green Building Council and applied internationally.</p>
+          <div style="margin-top:1rem; font-size:0.8rem; color:var(--gray-400);">Operator: USGBC · Levels: Certified – Platinum</div>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon blue">🔵</div>
+          <h3>BREEAM</h3>
+          <p>Building Research Establishment Environmental Assessment Method, the UK's leading sustainability assessment method. Widely used in Europe and increasingly adopted globally.</p>
+          <div style="margin-top:1rem; font-size:0.8rem; color:var(--gray-400);">Operator: BRE · Levels: Pass – Outstanding</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSIVE DESIGN -->
+  <div class="section">
+    <div class="section-eyebrow">Design Principles</div>
+    <h2 class="section-title">Passive Design Strategies</h2>
+    <p class="section-desc">Passive design harnesses climate, site, and building form to naturally regulate temperature and light — reducing mechanical heating and cooling loads.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+      <div class="card" style="border-top: 3px solid var(--green-400);">
+        <h3 style="font-size:1rem;">☀️ Solar Orientation</h3>
+        <p style="font-size:0.87rem;">Positioning buildings and glazing to maximise winter solar gain while providing shading in summer through eaves, louvres, and screening.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--teal-400);">
+        <h3 style="font-size:1rem;">💨 Natural Ventilation</h3>
+        <p style="font-size:0.87rem;">Cross-ventilation strategies using prevailing wind patterns, operable windows, and stack effect to cool buildings without mechanical systems.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--earth-400);">
+        <h3 style="font-size:1rem;">🏠 Thermal Mass</h3>
+        <p style="font-size:0.87rem;">Dense materials (concrete, rammed earth, brick) absorb daytime heat and release it slowly at night, moderating internal temperatures.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--blue-400);">
+        <h3 style="font-size:1rem;">🪟 High-Performance Glazing</h3>
+        <p style="font-size:0.87rem;">Double and triple glazing, low-e coatings, and thermochromic glass manage heat transfer and glare while maximising daylight.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--green-400);">
+        <h3 style="font-size:1rem;">🌳 Green Roofs & Walls</h3>
+        <p style="font-size:0.87rem;">Vegetated surfaces reduce the urban heat island effect, provide insulation, manage stormwater, and support biodiversity.</p>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--teal-400);">
+        <h3 style="font-size:1rem;">🔲 Insulation</h3>
+        <p style="font-size:0.87rem;">High-performance wall, roof, and floor insulation minimises heat loss and gain, dramatically reducing heating and cooling energy loads.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENERGY CALCULATOR -->
+  <div class="section-full section-bg-earth">
+    <div class="section" style="padding: 0;">
+      <div class="section-eyebrow">Interactive Tool</div>
+      <h2 class="section-title">Embodied Carbon Estimator</h2>
+      <p class="section-desc">Adjust the building parameters below to get an indicative embodied carbon estimate for a typical commercial project.</p>
+      <div class="contact-form" style="max-width: 520px;">
+        <div class="form-group">
+          <label class="form-label">Floor Area (m²)</label>
+          <input type="range" min="500" max="20000" step="500" value="5000" id="ec-area" oninput="updateEC()" style="width:100%;">
+          <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--gray-400); margin-top:4px;"><span>500 m²</span><span id="ec-area-val">5,000 m²</span><span>20,000 m²</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Structure</label>
+          <select class="form-select" id="ec-structure" onchange="updateEC()">
+            <option value="400">Concrete (400 kgCO₂e/m²)</option>
+            <option value="300">Steel Frame (300 kgCO₂e/m²)</option>
+            <option value="180">Timber / Mass Timber (180 kgCO₂e/m²)</option>
+            <option value="250">Hybrid Concrete-Timber (250 kgCO₂e/m²)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Recycled Content</label>
+          <input type="range" min="0" max="50" step="5" value="10" id="ec-recycled" oninput="updateEC()" style="width:100%;">
+          <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--gray-400); margin-top:4px;"><span>0%</span><span id="ec-recycled-val">10%</span><span>50%</span></div>
+        </div>
+        <div class="calc-output">
+          <div class="calc-result-num" id="ec-result">1,800 tCO₂e</div>
+          <div class="calc-result-label">Estimated embodied carbon (indicative)</div>
+          <div id="ec-equiv" style="font-size:0.8rem; color:var(--green-600); margin-top:0.5rem;"></div>
+        </div>
+        <p style="font-size:0.75rem; color:var(--gray-400); margin-top:0.75rem;">This is a simplified educational estimate. Professional lifecycle assessment tools (e.g. One Click LCA, SimaPro) should be used for project-specific calculations.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- =================== TECHNOLOGY =================== -->
+<div class="page" id="page-technology">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › Technology</div>
+      <h1>Emerging Technologies</h1>
+      <p>The innovations transforming construction from a traditional, labour-intensive industry into a data-rich, precision-driven sector.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Technology Landscape</div>
+    <h2 class="section-title">Key Technologies Shaping the Sector</h2>
+
+    <div class="tech-feature fade-in">
+      <div class="tech-icon" style="background: var(--green-50);">🤖</div>
+      <div>
+        <h3>Artificial Intelligence & Machine Learning</h3>
+        <p>AI is being applied across scheduling optimisation, predictive maintenance, cost estimation, risk assessment, defect detection from imagery, and generative design. Machine learning models trained on historical project data can identify schedule or budget risk earlier than traditional methods, enabling proactive intervention.</p>
+        <div class="pill-grid">
+          <span class="pill green">Predictive Maintenance</span>
+          <span class="pill green">Generative Design</span>
+          <span class="pill green">Risk Analytics</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-feature fade-in">
+      <div class="tech-icon" style="background: var(--teal-50);">🌐</div>
+      <div>
+        <h3>Internet of Things (IoT) & Smart Sensors</h3>
+        <p>IoT devices embedded in buildings and construction sites collect real-time data on structural integrity, indoor air quality, temperature, humidity, occupancy, and energy use. This data enables responsive building systems, predictive maintenance, and evidence-based facility management decisions.</p>
+        <div class="pill-grid">
+          <span class="pill teal">Structural Monitoring</span>
+          <span class="pill teal">Indoor Air Quality</span>
+          <span class="pill teal">Occupancy Analytics</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-feature fade-in">
+      <div class="tech-icon" style="background: var(--earth-50);">🏗️</div>
+      <div>
+        <h3>Digital Twins</h3>
+        <p>A digital twin is a dynamic, real-time virtual replica of a physical building or infrastructure asset. By continuously synchronising with live sensor data, digital twins enable predictive simulation, scenario testing, and performance optimisation across the entire asset lifecycle — from design through to decommissioning.</p>
+        <div class="pill-grid">
+          <span class="pill earth">Real-Time Simulation</span>
+          <span class="pill earth">Lifecycle Management</span>
+          <span class="pill earth">Scenario Planning</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-feature fade-in">
+      <div class="tech-icon" style="background: var(--blue-50);">🖨️</div>
+      <div>
+        <h3>3D Printing & Additive Manufacturing</h3>
+        <p>Large-scale 3D printing of building components — and increasingly whole structures — using concrete, polymers, and even recycled materials is gaining traction. This approach dramatically reduces material waste, enables complex geometries, and can dramatically shorten on-site construction time.</p>
+        <div class="pill-grid">
+          <span class="pill" style="border-color:var(--blue-200); color:var(--blue-600); background:var(--blue-50);">Concrete Printing</span>
+          <span class="pill" style="border-color:var(--blue-200); color:var(--blue-600); background:var(--blue-50);">Waste Reduction</span>
+          <span class="pill" style="border-color:var(--blue-200); color:var(--blue-600); background:var(--blue-50);">Complex Forms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-feature fade-in">
+      <div class="tech-icon" style="background: var(--green-50);">🚁</div>
+      <div>
+        <h3>Drones & Autonomous Surveying</h3>
+        <p>Unmanned aerial vehicles equipped with LiDAR, photogrammetry, and thermal imaging cameras are transforming site surveying, progress monitoring, safety inspections, and quality assurance. They provide rapid, accurate, and safe data collection in areas that are difficult or dangerous to access by foot.</p>
+        <div class="pill-grid">
+          <span class="pill green">Site Surveying</span>
+          <span class="pill green">Progress Monitoring</span>
+          <span class="pill green">Safety Inspection</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-feature fade-in">
+      <div class="tech-icon" style="background: var(--teal-50);">🥽</div>
+      <div>
+        <h3>Augmented & Virtual Reality</h3>
+        <p>AR and VR are used throughout construction for immersive design review, site coordination, training simulations, safety inductions, and stakeholder engagement. Mixed reality headsets allow workers to overlay BIM models directly onto physical construction for precise positioning and quality checking.</p>
+        <div class="pill-grid">
+          <span class="pill teal">Design Review</span>
+          <span class="pill teal">Training</span>
+          <span class="pill teal">Site Overlay</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div class="section-full section-bg-alt">
+    <div class="section" style="padding: 0;">
+      <div class="section-eyebrow">Glossary</div>
+      <h2 class="section-title">Key Terms Defined</h2>
+      <dl>
+        <div class="glossary-term">
+          <dt>BIM</dt>
+          <dd>Building Information Modelling — a digital process for creating and managing information about a built asset throughout its lifecycle.</dd>
+        </div>
+        <div class="glossary-term">
+          <dt>Digital Twin</dt>
+          <dd>A real-time virtual model of a physical asset, synchronised with live data to enable simulation, monitoring, and optimisation.</dd>
+        </div>
+        <div class="glossary-term">
+          <dt>Embodied Carbon</dt>
+          <dd>The greenhouse gas emissions associated with the extraction, manufacture, transport, and assembly of building materials.</dd>
+        </div>
+        <div class="glossary-term">
+          <dt>NABERS</dt>
+          <dd>National Australian Built Environment Rating System — measures operational environmental performance of buildings.</dd>
+        </div>
+        <div class="glossary-term">
+          <dt>Net Zero Building</dt>
+          <dd>A building that produces as much renewable energy as it consumes on an annual basis, resulting in zero net energy from the grid.</dd>
+        </div>
+        <div class="glossary-term">
+          <dt>Prefabrication</dt>
+          <dd>The manufacture of building components off-site in a controlled factory environment, for assembly on-site.</dd>
+        </div>
+        <div class="glossary-term">
+          <dt>Thermal Mass</dt>
+          <dd>The capacity of a material to absorb, store, and release thermal energy — used to moderate internal temperatures in passive design.</dd>
+        </div>
+        <div class="glossary-term">
+          <dt>LiDAR</dt>
+          <dd>Light Detection and Ranging — a remote sensing technology used for high-resolution 3D mapping of buildings and sites.</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- =================== CASE STUDIES =================== -->
+<div class="page" id="page-case-studies">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › Case Studies</div>
+      <h1>Case Studies</h1>
+      <p>Real-world examples of smart construction and sustainable building in action, from Australia and around the world.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Featured Projects</div>
+    <h2 class="section-title">Projects in Focus</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+
+      <div class="case-card fade-in">
+        <div class="case-card-header" style="background: linear-gradient(135deg, var(--green-800), var(--green-600));">
+          <div>
+            <div class="case-label" style="color: var(--green-100);">Australia · Office</div>
+            <div style="color:white; font-family: 'Playfair Display'; font-size:1rem; font-weight:600;">Barangaroo International Towers, Sydney</div>
+          </div>
+        </div>
+        <div class="case-card-body">
+          <p style="font-size:0.88rem; color:var(--gray-600);">Three supertall commercial towers using 100% renewable energy, achieving 6-Star Green Star and 5.5-Star NABERS Energy ratings. Features advanced BMS, black water recycling, and a precinct-wide energy management system.</p>
+          <div class="case-meta">
+            <span>📍 Sydney, NSW</span>
+            <span>📅 2015–2019</span>
+            <span>⭐ 6-Star Green Star</span>
+          </div>
+          <div class="pill-grid">
+            <span class="pill green">6-Star Green Star</span>
+            <span class="pill teal">NABERS 5.5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card fade-in">
+        <div class="case-card-header" style="background: linear-gradient(135deg, var(--teal-800), var(--teal-600));">
+          <div>
+            <div class="case-label" style="color: var(--teal-100);">Australia · Education</div>
+            <div style="color:white; font-family: 'Playfair Display'; font-size:1rem; font-weight:600;">Pixel Building, Melbourne</div>
+          </div>
+        </div>
+        <div class="case-card-body">
+          <p style="font-size:0.88rem; color:var(--gray-600);">Australia's first carbon-neutral office building, achieving a perfect 100 NABERS score. Features wind turbines, solar panels, rainwater harvesting, and composting systems. Constructed using BIM with detailed lifecycle analysis.</p>
+          <div class="case-meta">
+            <span>📍 Melbourne, VIC</span>
+            <span>📅 2010</span>
+            <span>♻️ Carbon Neutral</span>
+          </div>
+          <div class="pill-grid">
+            <span class="pill teal">Carbon Neutral</span>
+            <span class="pill green">NABERS 100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card fade-in">
+        <div class="case-card-header" style="background: linear-gradient(135deg, var(--earth-800), var(--earth-600));">
+          <div>
+            <div class="case-label" style="color: var(--earth-100);">Singapore · Mixed Use</div>
+            <div style="color:white; font-family: 'Playfair Display'; font-size:1rem; font-weight:600;">Jewel Changi Airport</div>
+          </div>
+        </div>
+        <div class="case-card-body">
+          <p style="font-size:0.88rem; color:var(--gray-600);">A showcase of biophilic design and smart building systems. A 40m indoor waterfall anchors a vast glass dome, with sophisticated climate control that harvests rainwater and optimises HVAC loads across 135,000 m² of retail and gardens.</p>
+          <div class="case-meta">
+            <span>📍 Singapore</span>
+            <span>📅 2019</span>
+            <span>🌿 Biophilic</span>
+          </div>
+          <div class="pill-grid">
+            <span class="pill earth">Biophilic Design</span>
+            <span class="pill teal">Smart HVAC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card fade-in">
+        <div class="case-card-header" style="background: linear-gradient(135deg, var(--blue-800), var(--blue-600));">
+          <div>
+            <div class="case-label" style="color: var(--blue-100);">Germany · Residential</div>
+            <div style="color:white; font-family: 'Playfair Display'; font-size:1rem; font-weight:600;">Brock Commons Tallwood House</div>
+          </div>
+        </div>
+        <div class="case-card-body">
+          <p style="font-size:0.88rem; color:var(--gray-600);">While technically in Canada, this 18-storey mass timber student residence used innovative prefabrication and BIM, reducing embodied carbon by 2,432 tonnes CO₂e compared to a conventional concrete structure. A landmark project in tall timber construction.</p>
+          <div class="case-meta">
+            <span>📍 Vancouver, Canada</span>
+            <span>📅 2017</span>
+            <span>🌲 Mass Timber</span>
+          </div>
+          <div class="pill-grid">
+            <span class="pill" style="border-color:var(--blue-200); color:var(--blue-600); background:var(--blue-50);">Mass Timber</span>
+            <span class="pill green">Low Carbon</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card fade-in">
+        <div class="case-card-header" style="background: linear-gradient(135deg, var(--green-600), var(--teal-400));">
+          <div>
+            <div class="case-label" style="color: rgba(255,255,255,0.8);">Netherlands · Office</div>
+            <div style="color:white; font-family: 'Playfair Display'; font-size:1rem; font-weight:600;">Edge Olympic, Amsterdam</div>
+          </div>
+        </div>
+        <div class="case-card-body">
+          <p style="font-size:0.88rem; color:var(--gray-600);">Rated the world's most sustainable office building by BREEAM (98.36%), featuring 28,000 sensors, solar panels on every surface, personalised workplace apps, aquifer thermal energy storage, and real-time energy dashboards visible to all occupants.</p>
+          <div class="case-meta">
+            <span>📍 Amsterdam</span>
+            <span>📅 2015</span>
+            <span>🏆 BREEAM 98%</span>
+          </div>
+          <div class="pill-grid">
+            <span class="pill teal">BREEAM Outstanding</span>
+            <span class="pill green">IoT 28,000 Sensors</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card fade-in">
+        <div class="case-card-header" style="background: linear-gradient(135deg, #37474f, #546e7a);">
+          <div>
+            <div class="case-label" style="color: rgba(255,255,255,0.8);">UAE · Urban District</div>
+            <div style="color:white; font-family: 'Playfair Display'; font-size:1rem; font-weight:600;">Masdar City, Abu Dhabi</div>
+          </div>
+        </div>
+        <div class="case-card-body">
+          <p style="font-size:0.88rem; color:var(--gray-600);">A planned carbon-neutral, zero-waste city powered entirely by renewables. While development has evolved from original ambitions, it remains a critical living laboratory for sustainable urban design, passive cooling, and smart city infrastructure in an extreme climate.</p>
+          <div class="case-meta">
+            <span>📍 Abu Dhabi, UAE</span>
+            <span>📅 2008–ongoing</span>
+            <span>🌱 Zero Waste Target</span>
+          </div>
+          <div class="pill-grid">
+            <span class="pill earth">Smart City</span>
+            <span class="pill green">100% Renewable</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =================== NEWS =================== -->
+<div class="page" id="page-news">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › News</div>
+      <h1>News & Recent Developments</h1>
+      <p>Staying current with policy changes, industry milestones, and research breakthroughs in smart and sustainable construction.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="search-bar">
+      <input class="search-input" type="text" id="news-search" placeholder="Search news..." oninput="filterNews()">
+      <button class="search-btn">Search</button>
+    </div>
+
+    <div id="news-list">
+
+      <div class="news-item" data-tags="policy">
+        <div class="news-date">Mar 2025</div>
+        <div>
+          <div class="news-title">Australia Raises NCC 2025 Energy Efficiency Standards for Homes</div>
+          <div class="news-snippet">The National Construction Code update mandates 7-star NatHERS ratings for new residential construction nationally, with new provisions for all-electric homes and solar-readiness requirements entering force across Australian states and territories.</div>
+          <span class="news-tag policy">Policy</span>
+        </div>
+      </div>
+
+      <div class="news-item" data-tags="tech">
+        <div class="news-date">Feb 2025</div>
+        <div>
+          <div class="news-title">Google DeepMind AI Cuts Building Energy Use by 40% in Trials</div>
+          <div class="news-snippet">Expanded trials of DeepMind's AI-powered building management system across commercial properties have demonstrated consistent reductions in HVAC energy use, with the system learning from occupancy patterns and weather data to optimise cooling and heating in real time.</div>
+          <span class="news-tag tech">Technology</span>
+        </div>
+      </div>
+
+      <div class="news-item" data-tags="research">
+        <div class="news-date">Jan 2025</div>
+        <div>
+          <div class="news-title">Mass Timber Research Centre Opens at University of Queensland</div>
+          <div class="news-snippet">A new dedicated research facility focused on engineered timber structural systems, fire performance testing, and low-carbon construction methods opens in Brisbane, supported by industry partnerships with Lendlease and XLam Australia.</div>
+          <span class="news-tag research">Research</span>
+        </div>
+      </div>
+
+      <div class="news-item" data-tags="tech">
+        <div class="news-date">Dec 2024</div>
+        <div>
+          <div class="news-title">NSW Government Mandates BIM for Projects over $10M</div>
+          <div class="news-snippet">The NSW Department of Planning, Industry and Environment has announced a phased mandate for Building Information Modelling across all public infrastructure and building projects with a construction value exceeding $10 million, effective from mid-2025.</div>
+          <span class="news-tag tech">Technology</span>
+        </div>
+      </div>
+
+      <div class="news-item" data-tags="policy">
+        <div class="news-date">Nov 2024</div>
+        <div>
+          <div class="news-title">COP29: Global Buildings Breakthrough Commitment Expands</div>
+          <div class="news-snippet">Over 60 countries renewed their commitment to the Global Buildings Breakthrough initiative, pledging to make near-zero-emission and resilient buildings the new normal by 2030. Australia joined with updated national retrofit commitments for the commercial sector.</div>
+          <span class="news-tag policy">Policy</span>
+        </div>
+      </div>
+
+      <div class="news-item" data-tags="research">
+        <div class="news-date">Oct 2024</div>
+        <div>
+          <div class="news-title">3D-Printed Social Housing Project Completed in South Australia</div>
+          <div class="news-snippet">A six-dwelling affordable housing pilot using robotic concrete printing technology was completed in Adelaide, with construction taking 30% less time than conventional methods. The CSIRO-backed project is being monitored for long-term thermal performance and durability outcomes.</div>
+          <span class="news-tag research">Research</span>
+        </div>
+      </div>
+
+      <div class="news-item" data-tags="tech">
+        <div class="news-date">Sep 2024</div>
+        <div>
+          <div class="news-title">Digital Twin Pilot Launched for Sydney Metro Stations</div>
+          <div class="news-snippet">Transport for NSW and its construction partner have deployed a live digital twin across three Sydney Metro stations, enabling real-time structural health monitoring, predictive maintenance scheduling, and energy performance benchmarking from a centralised operations platform.</div>
+          <span class="news-tag tech">Technology</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =================== BLOG =================== -->
+<div class="page" id="page-blog">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › Blog</div>
+      <h1>Blog & Commentary</h1>
+      <p>In-depth articles exploring the ideas, debates, and emerging thinking in smart and sustainable construction.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="blog-featured">
+      <div class="blog-featured-eyebrow">Featured Article</div>
+      <h2>The Embodied Carbon Problem: Why 'Net Zero Operations' Isn't Enough</h2>
+      <p>The construction industry's focus on operational energy has long overshadowed a growing challenge: the carbon locked into materials themselves. As operational emissions fall, embodied carbon becomes the dominant challenge — and the sector is only beginning to grapple with what that means for procurement, design, and policy.</p>
+      <div class="blog-read-more" onclick="openBlogPost()">Read Article →</div>
+    </div>
+
+    <div class="blog-grid">
+      <div class="blog-card fade-in">
+        <div class="blog-card-img" style="background: var(--green-50);">🌲</div>
+        <div class="blog-card-body">
+          <div class="blog-card-cat">Materials</div>
+          <h3>Mass Timber's Moment: Can Wood Replace Concrete at Scale?</h3>
+          <p>Cross-laminated timber and glulam are capturing imaginations worldwide. We examine the structural capabilities, carbon sequestration benefits, and practical barriers to widespread adoption.</p>
+          <div class="blog-card-meta">By Dr. Sarah Chen · 12 Feb 2025 · 8 min read</div>
+        </div>
+      </div>
+      <div class="blog-card fade-in">
+        <div class="blog-card-img" style="background: var(--teal-50);">🤖</div>
+        <div class="blog-card-body">
+          <div class="blog-card-cat">Technology</div>
+          <h3>AI in Construction: Five Real-World Applications in 2025</h3>
+          <p>Beyond the hype, where is artificial intelligence actually delivering measurable value in construction projects today? We look at five verified case studies from Australian and international projects.</p>
+          <div class="blog-card-meta">By James Okafor · 28 Jan 2025 · 10 min read</div>
+        </div>
+      </div>
+      <div class="blog-card fade-in">
+        <div class="blog-card-img" style="background: var(--earth-50);">🏘️</div>
+        <div class="blog-card-body">
+          <div class="blog-card-cat">Policy</div>
+          <h3>Mandatory Disclosure: Does Telling People Help Them Choose?</h3>
+          <p>NABERS mandatory disclosure has been in place for large commercial buildings in Australia since 2011. New research examines whether transparency has actually driven investment in building upgrades and changed market behaviour.</p>
+          <div class="blog-card-meta">By Prof. L. Watts · 15 Jan 2025 · 12 min read</div>
+        </div>
+      </div>
+      <div class="blog-card fade-in">
+        <div class="blog-card-img" style="background: var(--blue-50);">💧</div>
+        <div class="blog-card-body">
+          <div class="blog-card-cat">Water</div>
+          <h3>Water-Positive Buildings: Going Beyond Net Zero Water</h3>
+          <p>A handful of pioneering projects are not just aiming to reduce water consumption but to produce more water than they use. We explore the technologies and design strategies making this possible.</p>
+          <div class="blog-card-meta">By Mei Lin · 3 Jan 2025 · 7 min read</div>
+        </div>
+      </div>
+      <div class="blog-card fade-in">
+        <div class="blog-card-img" style="background: var(--green-50);">☀️</div>
+        <div class="blog-card-body">
+          <div class="blog-card-cat">Energy</div>
+          <h3>Building-Integrated Photovoltaics: The Next Frontier</h3>
+          <p>BIPV integrates solar generation directly into building facades, roofs, and glazing. We look at the latest products, cost trajectories, and design considerations for architects and developers.</p>
+          <div class="blog-card-meta">By Alex Nguyen · 20 Dec 2024 · 9 min read</div>
+        </div>
+      </div>
+      <div class="blog-card fade-in">
+        <div class="blog-card-img" style="background: var(--earth-50);">🔄</div>
+        <div class="blog-card-body">
+          <div class="blog-card-cat">Circular Economy</div>
+          <h3>Designing for Disassembly: Buildings That Give Back</h3>
+          <p>What if buildings were designed from the outset to be dismantled and their materials recovered at end of life? We explore the design principles, contractual challenges, and market forces driving circular construction.</p>
+          <div class="blog-card-meta">By Rita Svensson · 10 Dec 2024 · 11 min read</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== RESOURCES =================== -->
+<div class="page" id="page-resources">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › Resources</div>
+      <h1>Resources & Tools</h1>
+      <p>A curated library of reports, frameworks, tools, and databases for students, researchers, and practitioners.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Key Frameworks</div>
+    <h2 class="section-title">Essential Reading & Frameworks</h2>
+    <div class="cards-grid">
+      <div class="card fade-in">
+        <div class="card-icon green">📋</div>
+        <h3>National Construction Code (NCC)</h3>
+        <p>Australia's primary national technical standard for building and plumbing design and construction. Volume One covers Class 2–9 buildings; Volume Two covers Class 1 and 10.</p>
+        <div style="margin-top:0.75rem;"><a href="https://ncc.abcb.gov.au/" target="_blank" style="font-size:0.82rem; color:var(--green-800);">ncc.abcb.gov.au →</a></div>
+      </div>
+      <div class="card fade-in">
+        <div class="card-icon teal">🌏</div>
+        <h3>IEA Global Status Report for Buildings</h3>
+        <p>The International Energy Agency's annual report tracking progress toward decarbonisation in the global buildings sector, with technology and policy analysis.</p>
+        <div style="margin-top:0.75rem;"><a href="https://www.iea.org/reports/buildings" target="_blank" style="font-size:0.82rem; color:var(--green-800);">iea.org →</a></div>
+      </div>
+      <div class="card fade-in">
+        <div class="card-icon earth">📊</div>
+        <h3>GBCA Green Star Resources</h3>
+        <p>Technical guidance, case studies, and tools from the Green Building Council of Australia supporting Green Star design and rating for projects across all building types.</p>
+        <div style="margin-top:0.75rem;"><a href="https://new.gbca.org.au/green-star/" target="_blank" style="font-size:0.82rem; color:var(--green-800);">gbca.org.au →</a></div>
+      </div>
+      <div class="card fade-in">
+        <div class="card-icon blue">📐</div>
+        <h3>Australasian BIM Advisory Board</h3>
+        <p>Resources, guidance notes, and the National BIM Guide for the adoption of Building Information Modelling across the construction industry in Australia and New Zealand.</p>
+        <div style="margin-top:0.75rem;"><a href="https://www.abab.net.au/" target="_blank" style="font-size:0.82rem; color:var(--green-800);">abab.net.au →</a></div>
+      </div>
+    </div>
+
+    <div class="section-eyebrow" style="margin-top: 3rem;">Software & Tools</div>
+    <h2 class="section-title">Key Industry Tools</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <div class="card" style="padding: 1.25rem;">
+        <h3 style="font-size:0.95rem;">Autodesk Revit</h3>
+        <p style="font-size:0.82rem;">Industry-standard BIM authoring tool for architecture, structure and MEP.</p>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <h3 style="font-size:0.95rem;">One Click LCA</h3>
+        <p style="font-size:0.82rem;">Lifecycle carbon assessment and embodied carbon calculation for buildings.</p>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <h3 style="font-size:0.95rem;">EnergyPlus</h3>
+        <p style="font-size:0.82rem;">Open-source building energy simulation engine by the US Department of Energy.</p>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <h3 style="font-size:0.95rem;">NatHERS AccuRate</h3>
+        <p style="font-size:0.82rem;">Australia's residential building energy efficiency rating software tool.</p>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <h3 style="font-size:0.95rem;">Rhino + Grasshopper</h3>
+        <p style="font-size:0.82rem;">Parametric design and environmental analysis for building form optimisation.</p>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <h3 style="font-size:0.95rem;">Trimble Connect</h3>
+        <p style="font-size:0.82rem;">Cloud-based BIM collaboration and construction data management platform.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== REFERENCES =================== -->
+<div class="page" id="page-references">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › References</div>
+      <h1>References & Bibliography</h1>
+      <p>Academic, governmental, and industry sources underpinning the content on this website.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <p style="color:var(--gray-500); font-size:0.85rem; margin-bottom:2rem;">References formatted in APA 7th edition style.</p>
+
+    <h3 style="font-family: var(--font-display); font-size:1.15rem; color:var(--green-800); margin-bottom:1rem;">Academic & Peer-Reviewed</h3>
+
+    <div class="ref-item">
+      <div class="ref-num">[1]</div>
+      <div class="ref-text"><strong>Eastman, C., Teicholz, P., Sacks, R., & Liston, K.</strong> (2018). <em>BIM Handbook: A Guide to Building Information Modeling for Owners, Managers, Designers, Engineers and Contractors</em> (3rd ed.). John Wiley & Sons.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[2]</div>
+      <div class="ref-text"><strong>Azhar, S.</strong> (2011). Building information modeling (BIM): Trends, benefits, risks, and challenges for the AEC industry. <em>Leadership and Management in Engineering, 11</em>(3), 241–252. https://doi.org/10.1061/(ASCE)LM.1943-5630.0000127</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[3]</div>
+      <div class="ref-text"><strong>Kibert, C. J.</strong> (2022). <em>Sustainable Construction: Green Building Design and Delivery</em> (5th ed.). John Wiley & Sons.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[4]</div>
+      <div class="ref-text"><strong>Grigoriadis, K., & Moreno-Cruz, J.</strong> (2023). Smart building technologies and energy efficiency: A systematic review. <em>Energy and Buildings, 280</em>, 112739. https://doi.org/10.1016/j.enbuild.2022.112739</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[5]</div>
+      <div class="ref-text"><strong>Pomponi, F., & Moncaster, A.</strong> (2016). Embodied carbon mitigation and reduction in the built environment — What does the evidence say? <em>Journal of Environmental Management, 181</em>, 687–700.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[6]</div>
+      <div class="ref-text"><strong>Geissdoerfer, M., Savaget, P., Bocken, N. M. P., & Hultink, E. J.</strong> (2017). The circular economy — A new sustainability paradigm? <em>Journal of Cleaner Production, 143</em>, 757–768.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[7]</div>
+      <div class="ref-text"><strong>Zhao, X., Pan, W., & Lu, W.</strong> (2016). Business innovation for delivering smart prefabricated buildings in urbanising China. <em>International Journal of Strategic Property Management, 20</em>(4), 330–342.</div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size:1.15rem; color:var(--green-800); margin: 2rem 0 1rem;">Government & Regulatory</h3>
+
+    <div class="ref-item">
+      <div class="ref-num">[8]</div>
+      <div class="ref-text"><strong>Australian Building Codes Board.</strong> (2022). <em>National Construction Code 2022: Volumes One, Two and Three</em>. Australian Government. https://ncc.abcb.gov.au/</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[9]</div>
+      <div class="ref-text"><strong>Department of Climate Change, Energy, the Environment and Water.</strong> (2023). <em>National Built Environment Policy 2023</em>. Australian Government.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[10]</div>
+      <div class="ref-text"><strong>Infrastructure Australia.</strong> (2021). <em>2021 Australian Infrastructure Plan</em>. Infrastructure Australia. https://www.infrastructureaustralia.gov.au/</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[11]</div>
+      <div class="ref-text"><strong>IPCC.</strong> (2022). <em>Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change</em>. Cambridge University Press.</div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size:1.15rem; color:var(--green-800); margin: 2rem 0 1rem;">Industry & Professional Bodies</h3>
+
+    <div class="ref-item">
+      <div class="ref-num">[12]</div>
+      <div class="ref-text"><strong>Green Building Council of Australia.</strong> (2023). <em>Green Star Performance: Rating Tool Technical Manual</em>. GBCA. https://new.gbca.org.au/</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[13]</div>
+      <div class="ref-text"><strong>International Energy Agency.</strong> (2024). <em>Buildings</em>. IEA. https://www.iea.org/energy-system/buildings</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[14]</div>
+      <div class="ref-text"><strong>World Green Building Council.</strong> (2019). <em>Bringing Embodied Carbon Upfront: Coordinated Action for the Building and Construction Sector</em>. WorldGBC. https://worldgbc.org/</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[15]</div>
+      <div class="ref-text"><strong>Australasian BIM Advisory Board.</strong> (2018). <em>National BIM Guide for Projects</em>. ABAB. https://www.abab.net.au/</div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">[16]</div>
+      <div class="ref-text"><strong>NABERS.</strong> (2024). <em>NABERS Energy Rating Rules for Office Buildings</em>. NSW Department of Planning, Housing and Infrastructure. https://www.nabers.gov.au/</div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size:1.15rem; color:var(--green-800); margin: 2rem 0 1rem;">Generative AI Tools Used</h3>
+
+    <div class="ref-item">
+      <div class="ref-num">[17]</div>
+      <div class="ref-text"><strong>Anthropic.</strong> (2025). <em>Claude (claude-sonnet-4 model)</em> [Generative AI]. Used for content drafting, educational text generation, and interactive element scripting. https://www.anthropic.com/</div>
+    </div>
+
+    <div style="background: var(--gray-50); border-radius: var(--radius); padding: 1.5rem; margin-top: 2rem; border: 1px solid var(--gray-100);">
+      <p style="font-size:0.85rem; color:var(--gray-600); line-height:1.7;"><strong style="color:var(--gray-800);">Note on AI-assisted content:</strong> This website was developed with the assistance of generative AI tools including Claude (Anthropic). AI tools were used to support content structuring, summarisation, and educational text generation. All content has been reviewed for accuracy against primary sources. Readers are encouraged to consult the cited original sources directly for authoritative information.</p>
+    </div>
+  </div>
+</div>
+
+<!-- =================== CONTACT =================== -->
+<div class="page" id="page-contact">
+  <div class="topic-hero">
+    <div class="section" style="padding: 0;">
+      <div class="breadcrumb"><span onclick="showPage('home')">Home</span> › Contact</div>
+      <h1>Contact & Questions</h1>
+      <p>Reach out with questions, research enquiries, collaboration proposals, or feedback on the site.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="two-col" style="align-items: start; gap: 4rem;">
+      <div>
+        <div class="section-eyebrow">Send a Message</div>
+        <h2 class="section-title" style="margin-bottom:1.5rem;">Get in Touch</h2>
+        <div class="contact-form">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-input" type="text" id="contact-name" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" id="contact-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">I am a...</label>
+            <select class="form-select" id="contact-role">
+              <option value="">Select your background</option>
+              <option>Architecture / Design Student</option>
+              <option>Construction / Property Student</option>
+              <option>Building Manager</option>
+              <option>Architect or Designer</option>
+              <option>Property Professional</option>
+              <option>Sustainability Advocate</option>
+              <option>Researcher / Academic</option>
+              <option>General Public</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select class="form-select" id="contact-subject">
+              <option value="">What is your enquiry about?</option>
+              <option>Question about content</option>
+              <option>Research collaboration</option>
+              <option>Consulting enquiry</option>
+              <option>Resource suggestion</option>
+              <option>Technical feedback</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" id="contact-message" placeholder="Tell us about your question or enquiry..."></textarea>
+          </div>
+          <button class="form-submit" onclick="submitContact()">Send Message</button>
+          <div class="form-success" id="contact-success">
+            ✓ Thank you for your message! We'll be in touch within 3–5 business days.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-eyebrow">Other Ways to Connect</div>
+        <h2 class="section-title" style="font-size:1.6rem; margin-bottom:1.5rem;">More Ways to Reach Us</h2>
+
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-icon teal" style="margin-bottom:0.75rem;">📧</div>
+          <h3 style="font-size:1rem;">Email</h3>
+          <p style="font-size:0.88rem;">For detailed research or consulting enquiries: <span style="color:var(--green-800);">research@buildsmart.edu.au</span></p>
+        </div>
+
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-icon green" style="margin-bottom:0.75rem;">❓</div>
+          <h3 style="font-size:1rem;">Frequently Asked Questions</h3>
+          <div class="accordion" style="margin-top:0.75rem;">
+            <div class="accordion-item">
+              <button class="accordion-trigger" onclick="toggleAccordion(this)" style="font-size:0.85rem;">Is BuildSmart affiliated with a university? <span class="accordion-icon">+</span></button>
+              <div class="accordion-body">
+                <div class="accordion-body-inner" style="font-size:0.83rem;">BuildSmart is an independent educational platform developed as part of a university project. Content is regularly reviewed against academic and industry sources. It is not a commercial platform.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-trigger" onclick="toggleAccordion(this)" style="font-size:0.85rem;">Can I cite BuildSmart in my assignments? <span class="accordion-icon">+</span></button>
+              <div class="accordion-body">
+                <div class="accordion-body-inner" style="font-size:0.83rem;">We recommend using the primary sources referenced on our References page for formal academic work. BuildSmart content can help orient your research but should not replace peer-reviewed sources.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-trigger" onclick="toggleAccordion(this)" style="font-size:0.85rem;">Can I contribute content or a case study? <span class="accordion-icon">+</span></button>
+              <div class="accordion-body">
+                <div class="accordion-body-inner" style="font-size:0.83rem;">Yes! We welcome contributions from practitioners, researchers, and students. Please use the contact form to get in touch with your proposal. All submissions are reviewed before publication.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1rem;">Rate This Resource</h3>
+          <p style="font-size:0.88rem; margin-bottom:0.5rem;">How useful has BuildSmart been?</p>
+          <div class="rating-stars" id="rating-stars">
+            <span class="star" onclick="rate(1)">★</span>
+            <span class="star" onclick="rate(2)">★</span>
+            <span class="star" onclick="rate(3)">★</span>
+            <span class="star" onclick="rate(4)">★</span>
+            <span class="star" onclick="rate(5)">★</span>
+          </div>
+          <div id="rating-msg" style="font-size:0.82rem; color:var(--gray-400);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">BuildSmart</div>
+      <p style="font-size:0.85rem; color:var(--gray-600); max-width:260px; line-height:1.65;">An educational and research resource on smart construction and sustainable buildings. Not a commercial platform.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Topics</h4>
+      <ul class="footer-links">
+        <li><a onclick="showPage('smart-construction')">Smart Construction</a></li>
+        <li><a onclick="showPage('sustainable-buildings')">Sustainable Buildings</a></li>
+        <li><a onclick="showPage('technology')">Technology</a></li>
+        <li><a onclick="showPage('case-studies')">Case Studies</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul class="footer-links">
+        <li><a onclick="showPage('news')">News</a></li>
+        <li><a onclick="showPage('blog')">Blog</a></li>
+        <li><a onclick="showPage('resources')">Tools & Reports</a></li>
+        <li><a onclick="showPage('references')">References</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul class="footer-links">
+        <li><a onclick="showPage('contact')">Contact Us</a></li>
+        <li><a onclick="showPage('references')">Acknowledgements</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2025 BuildSmart. Educational use only. Content supported by AI-assisted research tools.</div>
+    <div style="font-size:0.72rem;">Built with HTML, CSS & JavaScript · Fonts by Google Fonts</div>
+  </div>
+</footer>
+
+<script>
+// ===== PAGE NAVIGATION =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
+  const nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('active');
+  setTimeout(checkFade, 100);
+}
+
+// ===== FADE IN ON SCROLL =====
+function checkFade() {
+  document.querySelectorAll('.fade-in').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60) el.classList.add('visible');
+  });
+}
+window.addEventListener('scroll', checkFade);
+checkFade();
+
+// ===== HOME QUIZ =====
+function homeQuiz(btn, correct) {
+  const opts = document.querySelectorAll('#hq-opts .quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  const fb = document.getElementById('hq-feedback');
+  const next = document.getElementById('hq-next');
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✓ Correct! BIM — Building Information Modelling — is a collaborative digital process for creating and managing construction project data across a building\'s lifecycle.';
+    fb.className = 'quiz-feedback show correct';
+  } else {
+    btn.classList.add('wrong');
+    opts.forEach(o => { if(o.onclick.toString().includes('true')) o.classList.add('correct'); });
+    fb.textContent = '✗ Not quite. The correct answer is Building Information Modelling. BIM is now central to modern construction practice in Australia and globally.';
+    fb.className = 'quiz-feedback show wrong';
+  }
+  next.className = 'quiz-next show';
+}
+
+// ===== ACCORDION =====
+function toggleAccordion(trigger) {
+  const item = trigger.parentElement;
+  const body = item.querySelector('.accordion-body');
+  const isOpen = trigger.classList.contains('open');
+  item.closest('.accordion').querySelectorAll('.accordion-trigger').forEach(t => {
+    t.classList.remove('open');
+    t.parentElement.querySelector('.accordion-body').classList.remove('open');
+  });
+  if (!isOpen) { trigger.classList.add('open'); body.classList.add('open'); }
+}
+
+// ===== EMBODIED CARBON CALC =====
+function updateEC() {
+  const area = parseInt(document.getElementById('ec-area').value);
+  const structure = parseInt(document.getElementById('ec-structure').value);
+  const recycled = parseInt(document.getElementById('ec-recycled').value);
+  document.getElementById('ec-area-val').textContent = area.toLocaleString() + ' m²';
+  document.getElementById('ec-recycled-val').textContent = recycled + '%';
+  const base = (area * structure) / 1000;
+  const reduced = base * (1 - recycled / 100);
+  document.getElementById('ec-result').textContent = Math.round(reduced).toLocaleString() + ' tCO₂e';
+  const cars = Math.round(reduced / 4.6);
+  document.getElementById('ec-equiv').textContent = '≈ equivalent to ' + cars.toLocaleString() + ' passenger cars driven for one year';
+}
+updateEC();
+
+// ===== CONTACT FORM =====
+function submitContact() {
+  const name = document.getElementById('contact-name').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const msg = document.getElementById('contact-message').value.trim();
+  if (!name || !email || !msg) { alert('Please fill in your name, email, and message.'); return; }
+  document.getElementById('contact-success').classList.add('show');
+  document.querySelector('.form-submit').disabled = true;
+  document.querySelector('.form-submit').textContent = 'Sent ✓';
+}
+
+// ===== STAR RATING =====
+function rate(n) {
+  const stars = document.querySelectorAll('#rating-stars .star');
+  stars.forEach((s, i) => s.classList.toggle('lit', i < n));
+  const msgs = ['', 'Thanks for your feedback.', 'We appreciate your input.', 'Glad it\'s been useful!', 'Great to hear! Thanks.', 'Wonderful! Thank you so much.'];
+  document.getElementById('rating-msg').textContent = msgs[n];
+}
+
+// ===== NEWS FILTER =====
+function filterNews() {
+  const q = document.getElementById('news-search').value.toLowerCase();
+  document.querySelectorAll('.news-item').forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
+// ===== VIDEO =====
+function openYT(url) { window.open(url, '_blank'); }
+
+// ===== BLOG POST MODAL (simple) =====
+function openBlogPost() {
+  alert('Full article: "The Embodied Carbon Problem: Why Net Zero Operations Isn\'t Enough"\n\nThis feature would expand to a full article view in the complete website implementation. For this educational prototype, please refer to the References page for related academic sources on embodied carbon.');
+}
+</script>
+</body>
+</html>
