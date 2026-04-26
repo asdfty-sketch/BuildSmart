@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embodied Carbon Estimator — BuildSmart</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(160deg, #f0f7f0 0%, #e0f4f1 60%, #fdf6ed 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(46,125,50,0.13);
+    padding: 2.5rem;
+    max-width: 540px;
+    width: 100%;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: #00796b;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1f14;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: #555f4a;
+    margin-bottom: 2rem;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: #555f4a;
+    margin-bottom: 0.6rem;
+  }
+
+  .form-label .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: #2e7d32;
+    font-weight: 500;
+    background: #f0f7f0;
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #d4ecd4;
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2e7d32;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(46,125,50,0.3);
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    background: #388e3c;
+    transform: scale(1.15);
+  }
+
+  .range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #8e9480;
+    margin-top: 4px;
+  }
+
+  select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #d8dcd3;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    color: #2c3322;
+    background: #f8f9f7;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238e9480' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  select:focus { border-color: #2e7d32; background-color: white; }
+
+  .divider {
+    height: 1px;
+    background: #eef0eb;
+    margin: 1.75rem 0;
+  }
+
+  .result-box {
+    background: linear-gradient(135deg, #f0f7f0, #e0f4f1);
+    border: 1.5px solid #a8d8a8;
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+  }
+
+  .result-label {
+    font-size: 0.78rem;
+    color: #2e7d32;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .result-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1b5e20;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .result-unit {
+    font-size: 0.85rem;
+    color: #2e7d32;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .result-equiv {
+    font-size: 0.83rem;
+    color: #00796b;
+    padding-top: 0.85rem;
+    border-top: 1px solid #c8e6c9;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .result-equiv .icon { font-size: 1rem; }
+
+  .result-saving {
+    margin-top: 0.6rem;
+    font-size: 0.82rem;
+    color: #388e3c;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #2e7d32;
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .footer-note {
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    color: #8e9480;
+    line-height: 1.6;
+    padding: 0.85rem 1rem;
+    background: #f8f9f7;
+    border-radius: 8px;
+    border-left: 3px solid #a8d8a8;
+  }
+
+  .branding {
+    margin-top: 1.25rem;
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: #8e9480;
+  }
+
+  .branding span { color: #2e7d32; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="eyebrow">Interactive Tool · BuildSmart</div>
+  <h1>Embodied Carbon Estimator</h1>
+  <p class="subtitle">Adjust the parameters below to get an indicative embodied carbon estimate for a typical commercial building project.</p>
+
+  <!-- Floor Area -->
+  <div class="form-group">
+    <div class="form-label">
+      <span>Floor Area</span>
+      <span class="val" id="lbl-area">5,000 m²</span>
+    </div>
+    <input type="range" min="500" max="20000" step="500" value="5000" id="sl-area" oninput="calc()">
+    <div class="range-labels"><span>500 m²</span><span>20,000 m²</span></div>
+  </div>
+
+  <!-- Structure Type -->
+  <div class="form-group">
+    <div class="form-label"><span>Primary Structure</span></div>
+    <select id="sl-structure" onchange="calc()">
+      <option value="400">Concrete Frame — 400 kgCO₂e/m²</option>
+      <option value="300">Steel Frame — 300 kgCO₂e/m²</option>
+      <option value="180" selected>Mass Timber (CLT/Glulam) — 180 kgCO₂e/m²</option>
+      <option value="250">Hybrid Concrete-Timber — 250 kgCO₂e/m²</option>
+    </select>
+  </div>
+
+  <!-- Recycled Content -->
+  <div class="form-group">
+    <div class="form-label">
+      <span>Recycled / Low-Carbon Content</span>
+      <span class="val" id="lbl-recycled">10%</span>
+    </div>
+    <input type="range" min="0" max="50" step="5" value="10" id="sl-recycled" oninput="calc()">
+    <div class="range-labels"><span>0% (Virgin)</span><span>50% (High Recycled)</span></div>
+  </div>
+
+  <!-- Floors -->
+  <div class="form-group">
+    <div class="form-label">
+      <span>Number of Storeys</span>
+      <span class="val" id="lbl-floors">6 storeys</span>
+    </div>
+    <input type="range" min="1" max="50" step="1" value="6" id="sl-floors" oninput="calc()">
+    <div class="range-labels"><span>1</span><span>50</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Result -->
+  <div class="result-box">
+    <div class="result-label">Estimated Embodied Carbon</div>
+    <div class="result-num" id="res-num">810</div>
+    <div class="result-unit">tonnes CO₂e (tCO₂e)</div>
+    <div class="result-equiv">
+      <span class="icon">🚗</span>
+      <span id="res-cars">Equivalent to <strong>176 cars</strong> driven for one year</span>
+    </div>
+    <div class="result-saving">
+      <span class="icon">🌲</span>
+      <span id="res-trees">Offset would require <strong>40,500 trees</strong> planted</span>
+    </div>
+    <div style="margin-top: 0.85rem;">
+      <span class="badge" id="res-badge">MASS TIMBER · LOW CARBON</span>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    ⚠️ This is a simplified educational estimate only. Figures are indicative and based on typical industry benchmarks. For project-specific calculations, use accredited lifecycle assessment tools such as <strong>One Click LCA</strong> or <strong>SimaPro</strong>.
+  </div>
+
+  <div class="branding">Powered by <span>BuildSmart</span> · Educational Use Only</div>
+</div>
+
+<script>
+  const badges = {
+    400: 'CONCRETE FRAME · HIGH EMBODIED CARBON',
+    300: 'STEEL FRAME · MODERATE EMBODIED CARBON',
+    180: 'MASS TIMBER · LOW CARBON',
+    250: 'HYBRID STRUCTURE · MODERATE-LOW CARBON'
+  };
+
+  function calc() {
+    const area     = parseInt(document.getElementById('sl-area').value);
+    const kgm2     = parseInt(document.getElementById('sl-structure').value);
+    const recycled = parseInt(document.getElementById('sl-recycled').value);
+    const floors   = parseInt(document.getElementById('sl-floors').value);
+
+    // Update labels
+    document.getElementById('lbl-area').textContent     = area.toLocaleString() + ' m²';
+    document.getElementById('lbl-recycled').textContent = recycled + '%';
+    document.getElementById('lbl-floors').textContent   = floors + (floors === 1 ? ' storey' : ' storeys');
+
+    // Core calc — floor multiplier adds complexity for tall buildings
+    const floorFactor = 1 + (floors > 10 ? (floors - 10) * 0.01 : 0);
+    const base    = (area * kgm2 * floorFactor) / 1000; // tCO2e
+    const reduced = Math.round(base * (1 - recycled / 100));
+
+    // Equivalencies
+    const cars  = Math.round(reduced / 4.6);
+    const trees = Math.round(reduced * 50);
+
+    document.getElementById('res-num').textContent   = reduced.toLocaleString();
+    document.getElementById('res-cars').innerHTML    = 'Equivalent to <strong>' + cars.toLocaleString() + ' cars</strong> driven for one year';
+    document.getElementById('res-trees').innerHTML   = 'Offset would require <strong>' + trees.toLocaleString() + ' trees</strong> planted';
+    document.getElementById('res-badge').textContent = badges[kgm2];
+  }
+
+  // Run on load
+  calc();
+</script>
+</body>
+</html>
