@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construction Technology Timeline — BuildSmart</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #2e7d32;
+    --green-light: #4caf50;
+    --green-pale: #f0f7f0;
+    --green-border: #c8e6c9;
+    --teal: #00796b;
+    --teal-pale: #e0f4f1;
+    --amber: #e65100;
+    --amber-pale: #fff3e0;
+    --blue: #1565c0;
+    --blue-pale: #e3f2fd;
+    --purple: #6a1b9a;
+    --purple-pale: #f3e5f5;
+    --slate: #37474f;
+    --slate-pale: #eceff1;
+    --ink: #1a1f14;
+    --body: #3d4a32;
+    --muted: #6b7a5f;
+    --rule: #e0e4da;
+    --bg: #fafaf8;
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    padding: 2.5rem 2rem 2rem;
+  }
+
+  .page-header-inner {
+    max-width: 860px; margin: 0 auto;
+  }
+
+  .page-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; font-weight: 500;
+    color: var(--teal); text-transform: uppercase;
+    letter-spacing: 0.14em; margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .page-label::before { content: ''; width: 20px; height: 1.5px; background: var(--teal); }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 700; color: var(--ink);
+    line-height: 1.15; margin-bottom: 0.6rem;
+  }
+
+  .page-header p {
+    font-size: 0.95rem; color: var(--muted);
+    max-width: 560px; font-weight: 300; line-height: 1.75;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 2rem;
+    position: sticky; top: 0; z-index: 10;
+  }
+
+  .filter-bar-inner {
+    max-width: 860px; margin: 0 auto;
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-bar-inner::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    padding: 0.9rem 1.1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 500;
+    color: var(--muted); background: none; border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer; white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .filter-btn:hover { color: var(--ink); }
+  .filter-btn.active { color: var(--green); border-bottom-color: var(--green); font-weight: 600; }
+
+  /* ── CONTENT AREA ── */
+  .content {
+    max-width: 860px; margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  /* ── ERA HEADING ── */
+  .era-heading {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 2.5rem 0 1.5rem;
+  }
+  .era-heading:first-child { margin-top: 0; }
+
+  .era-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; font-weight: 500;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.1em; white-space: nowrap;
+  }
+
+  .era-rule { flex: 1; height: 1px; background: var(--rule); }
+
+  /* ── TIMELINE ENTRY ── */
+  .entry {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 0 1.5rem;
+    margin-bottom: 2px;
+    position: relative;
+  }
+
+  /* Year column */
+  .entry-year-col {
+    display: flex; flex-direction: column; align-items: flex-end;
+    padding-top: 1.1rem;
+  }
+
+  .entry-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--ink); line-height: 1;
+    text-align: right;
+  }
+
+  .entry-year.projected {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.88rem;
+  }
+
+  /* Vertical spine */
+  .entry-spine {
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+  }
+
+  /* The dot is handled via ::before on the card */
+
+  /* Card */
+  .entry-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .entry-card:hover { border-color: #b0bda8; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .entry-card.open { border-color: var(--green); }
+
+  /* Coloured left accent bar */
+  .entry-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 3px;
+    border-radius: 8px 0 0 8px;
+  }
+
+  .entry-card-head {
+    display: flex; align-items: center;
+    padding: 1rem 1.25rem 1rem 1.5rem; gap: 0.85rem;
+  }
+
+  .entry-icon {
+    width: 34px; height: 34px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+
+  .entry-title-wrap { flex: 1; min-width: 0; }
+
+  .entry-name {
+    font-weight: 600; font-size: 0.95rem; color: var(--ink);
+    line-height: 1.3; margin-bottom: 2px;
+  }
+
+  .entry-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  .entry-chevron {
+    font-size: 0.75rem; color: var(--muted);
+    transition: transform 0.25s; flex-shrink: 0;
+  }
+  .entry-card.open .entry-chevron { transform: rotate(180deg); }
+
+  /* Expanded body */
+  .entry-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .entry-body.open { max-height: 600px; }
+
+  .entry-body-inner {
+    padding: 0 1.5rem 1.25rem 1.5rem;
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+  }
+
+  .entry-desc {
+    font-size: 0.88rem; color: var(--body);
+    line-height: 1.75; margin-bottom: 0.85rem;
+  }
+
+  .entry-aus {
+    font-size: 0.82rem; color: var(--teal);
+    line-height: 1.65;
+    padding: 0.6rem 0.85rem;
+    background: var(--teal-pale);
+    border-radius: 5px;
+    margin-bottom: 0.85rem;
+  }
+
+  .entry-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .entry-tag {
+    font-size: 0.72rem; font-family: 'DM Mono', monospace;
+    padding: 3px 9px; border-radius: 4px;
+    font-weight: 500;
+  }
+
+  /* Spine connector line between entries */
+  .spine-connector {
+    width: 1px; flex: 1; min-height: 10px;
+    background: var(--rule); margin: 0;
+  }
+
+  /* Empty state */
+  .empty { padding: 3rem 0; text-align: center; color: var(--muted); font-size: 0.9rem; display: none; }
+  .empty.show { display: block; }
+
+  /* Category colour maps */
+  .cat-digital  { --c: #1565c0; --cp: #e3f2fd; }
+  .cat-bim      { --c: #2e7d32; --cp: #f0f7f0; }
+  .cat-iot      { --c: #00796b; --cp: #e0f4f1; }
+  .cat-drones   { --c: #6a1b9a; --cp: #f3e5f5; }
+  .cat-3dp      { --c: #e65100; --cp: #fff3e0; }
+  .cat-twin     { --c: #0277bd; --cp: #e1f5fe; }
+  .cat-arvr     { --c: #558b2f; --cp: #f1f8e9; }
+  .cat-ai       { --c: #ad1457; --cp: #fce4ec; }
+  .cat-robotics { --c: #37474f; --cp: #eceff1; }
+  .cat-materials{ --c: #4e342e; --cp: #efebe9; }
+
+  .entry-card::before   { background: var(--c, #ccc); }
+  .entry-icon           { background: var(--cp, #eee); }
+  .entry-cat            { color: var(--c, #888); }
+  .entry-tag            { background: var(--cp, #eee); color: var(--c, #888); }
+  .entry-card.open .entry-name { color: var(--c, var(--ink)); }
+
+  /* Projected styling */
+  .entry-card.projected { background: #fafaf8; }
+  .entry-card.projected .entry-name { color: var(--muted); }
+
+  /* Count badge in filter */
+  .count { font-size: 0.68rem; color: var(--muted); margin-left: 3px; }
+
+  /* Footer */
+  .timeline-footer {
+    max-width: 860px; margin: 0 auto;
+    padding: 0 2rem 2rem;
+    font-size: 0.78rem; color: var(--muted);
+    border-top: 1px solid var(--rule); padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .timeline-footer span { font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-label">BuildSmart · Smart Construction</div>
+    <h1>Construction Technology Timeline</h1>
+    <p>Key innovations that have transformed construction from the 1990s through to today — and what's on the horizon. Click any entry to read more.</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-bar-inner" id="filter-bar">
+    <button class="filter-btn active" data-cat="All" onclick="filter('All', this)">All <span class="count" id="cnt-all"></span></button>
+    <button class="filter-btn" data-cat="Digital"   onclick="filter('Digital', this)">Digital</button>
+    <button class="filter-btn" data-cat="BIM"       onclick="filter('BIM', this)">BIM</button>
+    <button class="filter-btn" data-cat="IoT"       onclick="filter('IoT', this)">IoT</button>
+    <button class="filter-btn" data-cat="Drones"    onclick="filter('Drones', this)">Drones</button>
+    <button class="filter-btn" data-cat="3D Printing" onclick="filter('3D Printing', this)">3D Printing</button>
+    <button class="filter-btn" data-cat="Digital Twin" onclick="filter('Digital Twin', this)">Digital Twin</button>
+    <button class="filter-btn" data-cat="AR/VR"     onclick="filter('AR/VR', this)">AR / VR</button>
+    <button class="filter-btn" data-cat="AI"        onclick="filter('AI', this)">AI</button>
+    <button class="filter-btn" data-cat="Robotics"  onclick="filter('Robotics', this)">Robotics</button>
+    <button class="filter-btn" data-cat="Materials" onclick="filter('Materials', this)">Materials</button>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content" id="content"></div>
+
+<div class="empty" id="empty">No events match this filter.</div>
+
+<div class="timeline-footer">
+  <span>BuildSmart · Educational use only</span>
+  <span>Sources: industry literature, ABAB, CSIRO, Infrastructure Australia</span>
+</div>
+
+<script>
+var catClass = {
+  'Digital': 'cat-digital', 'BIM': 'cat-bim', 'IoT': 'cat-iot',
+  'Drones': 'cat-drones', '3D Printing': 'cat-3dp', 'Digital Twin': 'cat-twin',
+  'AR/VR': 'cat-arvr', 'AI': 'cat-ai', 'Robotics': 'cat-robotics', 'Materials': 'cat-materials'
+};
+
+var events = [
+  {
+    year: 1994, era: 'Digital Foundations (1990s)', cat: 'Digital', projected: false,
+    icon: '📐', name: 'CAD Goes Mainstream',
+    desc: 'Computer-Aided Design replaces hand drafting as the industry standard across architecture and engineering. AutoCAD dominates, dramatically accelerating drawing production and enabling easier revisions across the built environment sector.',
+    aus: '🇦🇺 Australian firms rapidly adopted AutoCAD through the mid-1990s, with TAFE institutes and universities updating curricula to reflect the shift.',
+    tags: ['Drafting', 'Drawing accuracy', 'Digital workflow']
+  },
+  {
+    year: 1997, era: 'Digital Foundations (1990s)', cat: 'BIM', projected: false,
+    icon: '🔗', name: 'Early BIM Concepts Emerge',
+    desc: 'Autodesk, Graphisoft, and Bentley begin developing object-based modelling tools that embed building data into geometric elements — the conceptual foundation of Building Information Modelling. Graphisoft\'s ArchiCAD gains traction as the first true BIM authoring tool.',
+    aus: '🇦🇺 Early BIM adopters in Australia were primarily large architectural practices experimenting with ArchiCAD in research and commercial contexts.',
+    tags: ['Parametric objects', 'Data-rich models', 'Design coordination']
+  },
+  {
+    year: 2002, era: 'BIM Emerges (2000s)', cat: 'BIM', projected: false,
+    icon: '🏗️', name: 'Autodesk Acquires Revit',
+    desc: 'Autodesk acquires Revit Technology Corporation, signalling its commitment to BIM-based design tools. Revit\'s parametric change propagation and integrated model approach rapidly gains industry acceptance, particularly in the USA, before spreading globally.',
+    aus: '🇦🇺 Revit began appearing in larger Australian architectural and engineering firms by the mid-2000s, gradually displacing 2D CAD on significant projects.',
+    tags: ['Parametric modelling', 'Clash detection', 'Industry standard']
+  },
+  {
+    year: 2006, era: 'BIM Emerges (2000s)', cat: 'IoT', projected: false,
+    icon: '📡', name: 'IoT Sensors Enter Construction',
+    desc: 'Early Internet of Things technologies begin appearing on large construction sites — primarily structural health monitoring sensors on bridges and tunnels. Wireless data transmission enables remote monitoring without costly cabling infrastructure.',
+    aus: '🇦🇺 Early IoT monitoring was deployed on major Australian infrastructure including the Sydney Desalination Plant construction project.',
+    tags: ['Structural monitoring', 'Remote data', 'Wireless sensors']
+  },
+  {
+    year: 2008, era: 'BIM Emerges (2000s)', cat: 'Drones', projected: false,
+    icon: '🚁', name: 'Commercial Drones Begin Site Use',
+    desc: 'Early commercial drones (UAVs) begin appearing on construction sites for aerial photography and basic progress monitoring. GPS accuracy and payload capacity are still limited, but the potential for site surveying is immediately recognised by early adopters.',
+    aus: '🇦🇺 CASA regulatory frameworks for commercial drone use in construction began developing from 2009 onwards.',
+    tags: ['Aerial survey', 'Progress monitoring', 'Site access']
+  },
+  {
+    year: 2011, era: 'Smart Construction Accelerates (2010s)', cat: 'BIM', projected: false,
+    icon: '🌐', name: 'UK Government BIM Mandate Announced',
+    desc: 'The UK Government announces a mandate requiring Level 2 BIM on all public sector construction projects by 2016 — a watershed moment for global adoption. The mandate accelerated software development, standards creation, and skills training worldwide.',
+    aus: '🇦🇺 Australian governments began developing their own BIM frameworks in response, with NSW leading on public project requirements.',
+    tags: ['Policy mandate', 'BIM Level 2', 'Public sector']
+  },
+  {
+    year: 2013, era: 'Smart Construction Accelerates (2010s)', cat: '3D Printing', projected: false,
+    icon: '🖨️', name: '3D Printing of Building Components',
+    desc: 'Large-format 3D printing of concrete structural components becomes technically feasible. The first 3D-printed building components are installed in real projects in China and Europe, promising dramatic reductions in formwork waste and labour costs for complex geometry.',
+    aus: '🇦🇺 CSIRO began research into concrete 3D printing for Australian housing applications around this time.',
+    tags: ['Additive manufacture', 'Waste reduction', 'Complex geometry']
+  },
+  {
+    year: 2015, era: 'Smart Construction Accelerates (2010s)', cat: 'Digital Twin', projected: false,
+    icon: '🔮', name: 'Digital Twins Concept Formalised',
+    desc: 'The concept of a "digital twin" — a live, data-synchronised virtual replica of a physical asset — becomes formally recognised across infrastructure and construction. NASA\'s earlier simulation work is adapted for built assets, supported by increasing IoT sensor density.',
+    aus: '🇦🇺 Infrastructure Australia began piloting digital twin concepts on major transport corridors in the mid-2010s.',
+    tags: ['Real-time simulation', 'Asset lifecycle', 'Predictive maintenance']
+  },
+  {
+    year: 2017, era: 'Smart Construction Accelerates (2010s)', cat: 'AR/VR', projected: false,
+    icon: '🥽', name: 'AR / VR Enters Construction Workflows',
+    desc: 'Augmented Reality headsets (Microsoft HoloLens, first generation) reach sufficient maturity for practical construction use. BIM model overlay on physical sites becomes commercially viable, enabling precise positioning, quality checking, and immersive client walkthroughs.',
+    aus: '🇦🇺 Major Australian contractors including Lendlease and CIMIC began deploying AR and VR tools on landmark projects from 2017.',
+    tags: ['BIM overlay', 'Quality checking', 'Client engagement']
+  },
+  {
+    year: 2018, era: 'Smart Construction Accelerates (2010s)', cat: 'Drones', projected: false,
+    icon: '📷', name: 'LiDAR Drones Revolutionise Surveying',
+    desc: 'LiDAR-equipped drones enable millimetre-accurate 3D point cloud mapping of entire construction sites within hours. Combined with photogrammetry, this replaces traditional surveying on many projects — reducing time significantly and improving safety.',
+    aus: '🇦🇺 Australian surveying firms rapidly adopted LiDAR drone platforms. CASA finalised its Part 101 regulations to provide a clear commercial framework.',
+    tags: ['Point cloud', 'mm accuracy', 'Safety improvement']
+  },
+  {
+    year: 2020, era: 'AI & Integration (2020s)', cat: 'AI', projected: false,
+    icon: '🧠', name: 'AI-Powered Design Tools Emerge',
+    desc: 'Generative design tools powered by machine learning enter mainstream practice. Platforms such as Autodesk Forma use AI to generate and evaluate thousands of design options against performance criteria — sun, wind, density, and cost — in minutes rather than weeks.',
+    aus: '🇦🇺 Leading Australian practices began using generative design tools for masterplanning and residential typology studies from 2020.',
+    tags: ['Generative design', 'Performance analysis', 'Rapid iteration']
+  },
+  {
+    year: 2021, era: 'AI & Integration (2020s)', cat: 'Robotics', projected: false,
+    icon: '🤖', name: 'Construction Robots Go Commercial',
+    desc: 'Commercially available construction robots enter the mainstream — Hilti Jaibot for ceiling drilling, Boston Dynamics Spot for site inspection, and Fastbrick Robotics\' Hadrian X for automated bricklaying. These platforms move from research labs to active construction sites.',
+    aus: '🇦🇺 Hadrian X, developed in Perth by FBR Ltd, completed commercial bricklaying projects in Western Australia — a significant milestone for Australian construction robotics.',
+    tags: ['Labour augmentation', 'Site safety', 'Precision']
+  },
+  {
+    year: 2022, era: 'AI & Integration (2020s)', cat: 'Digital Twin', projected: false,
+    icon: '🌍', name: 'National Digital Twin Framework (Australia)',
+    desc: 'The Australian Government formalises its National Digital Twin programme, coordinated by CSIRO, to create a federated national digital twin of Australia\'s built environment — connecting data from infrastructure, buildings, and land for whole-of-economy planning.',
+    aus: '🇦🇺 CSIRO leads the National Digital Twin programme with initial applications in flood risk, urban heat, and transport network modelling.',
+    tags: ['National programme', 'Open data', 'CSIRO']
+  },
+  {
+    year: 2024, era: 'AI & Integration (2020s)', cat: 'AI', projected: false,
+    icon: '✦', name: 'AI Construction Project Management',
+    desc: 'AI platforms such as Alice Technologies and Buildots use computer vision and machine learning to automate schedule optimisation and real-time progress tracking. Site cameras compare daily progress against the BIM model to flag deviations and predict delays before they occur.',
+    aus: '🇦🇺 Major Australian tier-1 contractors trialled AI progress monitoring on large hospital and infrastructure delivery programmes.',
+    tags: ['Schedule optimisation', 'Progress tracking', 'Risk prediction']
+  },
+  {
+    year: 2026, era: 'Emerging Horizon (2026–2035)', cat: 'Robotics', projected: true,
+    icon: '🚜', name: 'Autonomous Construction Vehicles',
+    desc: 'Fully autonomous earthmoving equipment, guided by GNSS, LiDAR, and on-board AI, begins wide commercial deployment on large civil projects. Komatsu, Caterpillar, and Volvo all have active autonomous fleet programmes, reducing operator exposure to hazardous site conditions.',
+    aus: '🇦🇺 Projected deployment pathway via mining-to-construction technology transfer, with early adoption on road and infrastructure projects in remote areas.',
+    tags: ['Autonomous systems', '24/7 operation', 'Precision grading']
+  },
+  {
+    year: 2030, era: 'Emerging Horizon (2026–2035)', cat: 'Digital Twin', projected: true,
+    icon: '🏙️', name: 'Integrated Smart City Digital Twins',
+    desc: 'City-scale digital twins — integrating building, infrastructure, transport, energy grid, and environmental data — become operational planning tools. Real-time simulation enables proactive management of extreme weather, population growth, and energy demand at a city level.',
+    aus: '🇦🇺 Sydney, Melbourne, and Brisbane are among cities targeted for full digital twin integration by 2030 under state and federal infrastructure strategies.',
+    tags: ['Smart city', 'Emergency management', 'Net zero tracking']
+  },
+  {
+    year: 2035, era: 'Emerging Horizon (2026–2035)', cat: 'Materials', projected: true,
+    icon: '🧪', name: 'Self-Healing & Responsive Materials',
+    desc: 'Smart building materials — including self-healing concrete (using bacteria or microcapsules), thermochromic glass, and phase-change insulation — become cost-competitive. Buildings respond autonomously to environmental conditions, extending service life and eliminating maintenance cycles.',
+    aus: '🇦🇺 CSIRO and the University of Melbourne lead research programmes on self-healing concrete suited to Australian climate conditions.',
+    tags: ['Self-healing concrete', 'Smart glass', 'Adaptive performance']
+  }
+];
+
+var activeFilter = 'All';
+var openId = null;
+
+function catCls(cat) {
+  return catClass[cat] || '';
+}
+
+function buildTimeline(filter) {
+  var content = document.getElementById('content');
+  var empty = document.getElementById('empty');
+  content.innerHTML = '';
+
+  var filtered = filter === 'All' ? events : events.filter(function(e){ return e.cat === filter; });
+
+  if (filtered.length === 0) {
+    empty.classList.add('show');
+    return;
+  }
+  empty.classList.remove('show');
+
+  var currentEra = null;
+
+  filtered.forEach(function(ev, idx) {
+    // Era heading
+    if (ev.era !== currentEra) {
+      currentEra = ev.era;
+      var eraDiv = document.createElement('div');
+      eraDiv.className = 'era-heading';
+      eraDiv.innerHTML = '<span class="era-label">' + ev.era + '</span><span class="era-rule"></span>';
+      content.appendChild(eraDiv);
+    }
+
+    var id = 'ev-' + idx;
+    var cls = catCls(ev.cat);
+    var projCls = ev.projected ? ' projected' : '';
+
+    var entry = document.createElement('div');
+    entry.className = 'entry';
+    entry.innerHTML = [
+      '<div class="entry-year-col">',
+        '<div class="entry-year' + (ev.projected ? ' projected' : '') + '">' + ev.year + '</div>',
+      '</div>',
+      '<div>',
+        '<div class="entry-card ' + cls + projCls + '" id="' + id + '" onclick="toggle(\'' + id + '\')">',
+          '<div class="entry-card-head">',
+            '<div class="entry-icon">' + ev.icon + '</div>',
+            '<div class="entry-title-wrap">',
+              '<div class="entry-name">' + ev.name + (ev.projected ? ' <span style="font-weight:400;font-size:0.8rem;color:var(--muted);">(projected)</span>' : '') + '</div>',
+              '<div class="entry-cat">' + ev.cat + '</div>',
+            '</div>',
+            '<span class="entry-chevron">▼</span>',
+          '</div>',
+          '<div class="entry-body" id="body-' + id + '">',
+            '<div class="entry-body-inner">',
+              '<p class="entry-desc">' + ev.desc + '</p>',
+              '<div class="entry-aus">' + ev.aus + '</div>',
+              '<div class="entry-tags">',
+                ev.tags.map(function(t){ return '<span class="entry-tag">' + t + '</span>'; }).join(''),
+              '</div>',
+            '</div>',
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join('');
+
+    content.appendChild(entry);
+  });
+}
+
+function toggle(id) {
+  var card = document.getElementById(id);
+  var body = document.getElementById('body-' + id);
+  var isOpen = card.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.entry-card.open').forEach(function(c) { c.classList.remove('open'); });
+  document.querySelectorAll('.entry-body.open').forEach(function(b) { b.classList.remove('open'); });
+
+  if (!isOpen) {
+    card.classList.add('open');
+    body.classList.add('open');
+  }
+}
+
+function filter(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  buildTimeline(cat);
+}
+
+// Init
+document.getElementById('cnt-all').textContent = '(' + events.length + ')';
+buildTimeline('All');
+</script>
+</body>
+</html>
